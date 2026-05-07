@@ -1,0 +1,16 @@
+package com.inviq.dao.filter;
+
+import com.inviq.core.dto.filter.BaseFilterRequest;
+import lombok.Getter;
+import lombok.Setter;
+
+/**
+ * @author ripesh created on 05/05/2026
+ */
+@Getter
+@Setter
+public class LevelSubjectsFilter extends BaseFilterRequest {
+  private String levelId;
+  private String subjectId;
+  private String subjectName;
+}
