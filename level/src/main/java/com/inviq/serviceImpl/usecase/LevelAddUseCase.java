@@ -48,6 +48,10 @@ public class LevelAddUseCase
 
   @Override
   protected LevelAddResponse prepareResponse(LevelEntity addedEntity) {
-    return new LevelAddResponse();
+    return new LevelAddResponse() {
+      {
+        setId(addedEntity.getId());
+      }
+    };
   }
 }

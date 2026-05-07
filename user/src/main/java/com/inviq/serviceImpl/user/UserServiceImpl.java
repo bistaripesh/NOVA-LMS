@@ -10,6 +10,7 @@ import com.inviq.dto.tenset.request.credential.ChangeCredentialRequest;
 import com.inviq.dto.tenset.request.user.UserAddRequest;
 import com.inviq.dto.tenset.request.user.UserDeleteRequest;
 import com.inviq.dto.tenset.request.user.UserUpdateRequest;
+import com.inviq.dto.tenset.response.user.UserSearchResponse;
 import com.inviq.service.UserCrudService;
 import com.inviq.serviceImpl.user.usecase.UserAddUseCase;
 import com.inviq.serviceImpl.user.usecase.UserCredentialUpdateUseCase;
@@ -58,7 +59,18 @@ public class UserServiceImpl implements UserCrudService {
 
   @Override
   public Optional<Response> findOne(UserFilter request) {
-    return Optional.empty();
+    return this.userDao
+        .findOne(request)
+        .map(
+            entity -> {
+              UserSearchResponse dto = new UserSearchResponse();
+              dto.setId(entity.getId());
+              dto.setFirstName(entity.getFirstName());
+              dto.setMiddleName(entity.getMiddleName());
+              dto.setLastName(entity.getLastName());
+              dto.setEmail(entity.getEmail());
+              return dto;
+            });
   }
 
   @Override

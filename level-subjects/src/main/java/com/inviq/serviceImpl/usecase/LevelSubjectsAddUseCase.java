@@ -70,6 +70,10 @@ public class LevelSubjectsAddUseCase
 
   @Override
   protected LevelSubjectsAddResponse prepareResponse(LevelSubjectsEntity addedEntity) {
-    return new LevelSubjectsAddResponse();
+    return new LevelSubjectsAddResponse() {
+      {
+        setId(addedEntity.getId());
+      }
+    };
   }
 }

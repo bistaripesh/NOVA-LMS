@@ -50,6 +50,10 @@ public class MaterialAddUseCase
 
   @Override
   protected MaterialAddResponse prepareResponse(MaterialEntity addedEntity) {
-    return new MaterialAddResponse();
+    return new MaterialAddResponse() {
+      {
+        setId(addedEntity.getId());
+      }
+    };
   }
 }

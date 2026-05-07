@@ -50,6 +50,10 @@ public class SubjectAddUseCase
 
   @Override
   protected SubjectAddResponse prepareResponse(SubjectEntity addedEntity) {
-    return new SubjectAddResponse();
+    return new SubjectAddResponse() {
+      {
+        setId(addedEntity.getId());
+      }
+    };
   }
 }

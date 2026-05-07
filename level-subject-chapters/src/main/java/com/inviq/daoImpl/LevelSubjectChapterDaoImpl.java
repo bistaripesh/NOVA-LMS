@@ -68,33 +68,33 @@ public class LevelSubjectChapterDaoImpl implements LevelSubjectChapterDao {
   public Pageable findWithPagination(LevelSubjectChapterFilter filter) {
 
     PageRequest pageRequest =
-            PageRequest.of(
-                    PageableUtil.getPageNumberForPagination(filter.getPageNumber()), filter.getPageSize());
+        PageRequest.of(
+            PageableUtil.getPageNumberForPagination(filter.getPageNumber()), filter.getPageSize());
 
     Page<LevelSubjectChapterEntity> page =
-            this.levelSubjectChapterRepository.findAll(this.getLevelSubjectChapterSpecification(filter), pageRequest);
+        this.levelSubjectChapterRepository.findAll(
+            this.getLevelSubjectChapterSpecification(filter), pageRequest);
 
     List<Response> responses =
         page.getContent().stream()
             .map(
                 entity -> {
                   LevelSubjectChapterSearchResponse dto = new LevelSubjectChapterSearchResponse();
-                    dto.setId(entity.getId());
-                    dto.setChapterName(entity.getChapter());
-                    dto.setDescription(entity.getDescription());
-                    dto.setLevelSubjectId(entity.getLevelSubject().getId());
-                    dto.setLevelId(entity.getLevelSubject().getLevel().getId());
-                    dto.setLevelName(entity.getLevelSubject().getLevel().getLevel());
-                    dto.setSubjectId(entity.getLevelSubject().getSubject().getId());
-                    dto.setSubjectName(entity.getLevelSubject().getSubject().getSubject());         return dto;
+                  dto.setId(entity.getId());
+                  dto.setChapterName(entity.getChapter());
+                  dto.setDescription(entity.getDescription());
+                  dto.setLevelSubjectId(entity.getLevelSubject().getId());
+                  dto.setLevelId(entity.getLevelSubject().getLevel().getId());
+                  dto.setLevelName(entity.getLevelSubject().getLevel().getLevel());
+                  dto.setSubjectId(entity.getLevelSubject().getSubject().getId());
+                  dto.setSubjectName(entity.getLevelSubject().getSubject().getSubject());
+                  return dto;
                 })
             .collect(Collectors.toList());
 
     return new Pageable(
-            filter.getPageNumber(), page.getSize(), (int) page.getTotalElements(), responses);
+        filter.getPageNumber(), page.getSize(), (int) page.getTotalElements(), responses);
   }
-
-
 
   @Override
   public Optional<LevelSubjectChapterEntity> findOne(LevelSubjectChapterFilter filter) {

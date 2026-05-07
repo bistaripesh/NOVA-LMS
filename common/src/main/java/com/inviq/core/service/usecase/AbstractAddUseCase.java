@@ -74,9 +74,11 @@ public abstract class AbstractAddUseCase<
     entityToAdd.setVersion(1);
     entityToAdd.setCreatedOn(Instant.now());
     entityToAdd.setModifiedOn(Instant.now());
-    entityToAdd.setCreatedBy( ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+    entityToAdd.setCreatedBy(
+        ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
             .getUserId());
-    entityToAdd.setModifiedBy( ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+    entityToAdd.setModifiedBy(
+        ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
             .getUserId());
   }
 

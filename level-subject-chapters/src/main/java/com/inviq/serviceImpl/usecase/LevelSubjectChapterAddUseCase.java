@@ -64,6 +64,10 @@ public class LevelSubjectChapterAddUseCase
 
   @Override
   protected LevelSubjectChapterAddResponse prepareResponse(LevelSubjectChapterEntity addedEntity) {
-    return new LevelSubjectChapterAddResponse();
+    return new LevelSubjectChapterAddResponse() {
+      {
+        setId(addedEntity.getId());
+      }
+    };
   }
 }

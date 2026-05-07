@@ -48,6 +48,10 @@ public class SubjectDeleteUseCase
 
   @Override
   protected SubjectDeleteResponse prepareResponse(SubjectEntity entityToUpdate) {
-    return new SubjectDeleteResponse();
+    return new SubjectDeleteResponse() {
+      {
+        setId(entityToUpdate.getId());
+      }
+    };
   }
 }

@@ -83,14 +83,14 @@ public class LevelSubjectChapterServiceImpl implements LevelSubjectChapterCrudSe
         .map(
             entity -> {
               LevelSubjectChapterSearchResponse dto = new LevelSubjectChapterSearchResponse();
-                dto.setId(entity.getId());
-                dto.setChapterName(entity.getChapter());
-                dto.setDescription(entity.getDescription());
-                dto.setLevelSubjectId(entity.getLevelSubject().getId());
-                dto.setLevelId(entity.getLevelSubject().getLevel().getId());
-                dto.setLevelName(entity.getLevelSubject().getLevel().getLevel());
-                dto.setSubjectId(entity.getLevelSubject().getSubject().getId());
-                dto.setSubjectName(entity.getLevelSubject().getSubject().getSubject());
+              dto.setId(entity.getId());
+              dto.setChapterName(entity.getChapter());
+              dto.setDescription(entity.getDescription());
+              dto.setLevelSubjectId(entity.getLevelSubject().getId());
+              dto.setLevelId(entity.getLevelSubject().getLevel().getId());
+              dto.setLevelName(entity.getLevelSubject().getLevel().getLevel());
+              dto.setSubjectId(entity.getLevelSubject().getSubject().getId());
+              dto.setSubjectName(entity.getLevelSubject().getSubject().getSubject());
               return (Response) dto;
             })
         .toList();

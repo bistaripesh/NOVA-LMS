@@ -52,6 +52,10 @@ public class LevelSubjectsDeleteUseCase
 
   @Override
   protected LevelSubjectsDeleteResponse prepareResponse(LevelSubjectsEntity entityToUpdate) {
-    return new LevelSubjectsDeleteResponse();
+    return new LevelSubjectsDeleteResponse() {
+      {
+        setId(entityToUpdate.getId());
+      }
+    };
   }
 }

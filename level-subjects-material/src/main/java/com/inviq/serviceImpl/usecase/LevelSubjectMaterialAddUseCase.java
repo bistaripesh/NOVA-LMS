@@ -69,6 +69,10 @@ public class LevelSubjectMaterialAddUseCase
   @Override
   protected LevelSubjectMaterialAddResponse prepareResponse(
       LevelSubjectMaterialEntity addedEntity) {
-    return new LevelSubjectMaterialAddResponse();
+    return new LevelSubjectMaterialAddResponse() {
+      {
+        setId(addedEntity.getId());
+      }
+    };
   }
 }

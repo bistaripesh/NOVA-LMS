@@ -47,6 +47,10 @@ public class MaterialDeleteUseCase
 
   @Override
   protected MaterialDeleteResponse prepareResponse(MaterialEntity entityToUpdate) {
-    return new MaterialDeleteResponse();
+    return new MaterialDeleteResponse() {
+      {
+        setId(entityToUpdate.getId());
+      }
+    };
   }
 }

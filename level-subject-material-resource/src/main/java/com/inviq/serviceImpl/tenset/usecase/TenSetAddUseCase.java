@@ -76,6 +76,10 @@ public class TenSetAddUseCase
 
   @Override
   protected TenSetAddResponse prepareResponse(TenSetEntity addedEntity) {
-    return new TenSetAddResponse();
+    return new TenSetAddResponse() {
+      {
+        setId(addedEntity.getId());
+      }
+    };
   }
 }

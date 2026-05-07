@@ -55,6 +55,10 @@ public class SubjectUpdateUseCase
 
   @Override
   protected SubjectUpdateResponse prepareResponse(SubjectEntity entityToUpdate) {
-    return new SubjectUpdateResponse();
+    return new SubjectUpdateResponse() {
+      {
+        setId(entityToUpdate.getId());
+      }
+    };
   }
 }

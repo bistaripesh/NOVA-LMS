@@ -54,6 +54,10 @@ public class MaterialUpdateUseCase
 
   @Override
   protected MaterialUpdateResponse prepareResponse(MaterialEntity entityToUpdate) {
-    return new MaterialUpdateResponse();
+    return new MaterialUpdateResponse() {
+      {
+        setId(entityToUpdate.getId());
+      }
+    };
   }
 }

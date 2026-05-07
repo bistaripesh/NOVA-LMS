@@ -1,6 +1,5 @@
 package com.inviq.dao;
 
-import com.inviq.dao.entity.LevelEntity;
 import com.inviq.dao.entity.LevelSubjectsEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

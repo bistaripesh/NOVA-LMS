@@ -45,6 +45,10 @@ public class TenSetDeleteUseCase
 
   @Override
   protected TenSetDeleteResponse prepareResponse(TenSetEntity entityToUpdate) {
-    return new TenSetDeleteResponse();
+    return new TenSetDeleteResponse() {
+      {
+        setId(entityToUpdate.getId());
+      }
+    };
   }
 }

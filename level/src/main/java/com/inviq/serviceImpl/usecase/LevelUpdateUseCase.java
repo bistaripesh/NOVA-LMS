@@ -52,6 +52,10 @@ public class LevelUpdateUseCase
 
   @Override
   protected LevelUpdateResponse prepareResponse(LevelEntity entityToUpdate) {
-    return new LevelUpdateResponse();
+    return new LevelUpdateResponse() {
+      {
+        setId(entityToUpdate.getId());
+      }
+    };
   }
 }

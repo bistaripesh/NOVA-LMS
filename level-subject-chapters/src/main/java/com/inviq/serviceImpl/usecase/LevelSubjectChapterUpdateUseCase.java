@@ -63,6 +63,10 @@ public class LevelSubjectChapterUpdateUseCase
   @Override
   protected LevelSubjectChapterUpdateResponse prepareResponse(
       LevelSubjectChapterEntity entityToUpdate) {
-    return new LevelSubjectChapterUpdateResponse();
+    return new LevelSubjectChapterUpdateResponse() {
+      {
+        setId(entityToUpdate.getId());
+      }
+    };
   }
 }

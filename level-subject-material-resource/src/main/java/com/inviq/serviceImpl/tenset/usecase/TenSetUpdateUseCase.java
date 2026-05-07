@@ -82,6 +82,10 @@ public class TenSetUpdateUseCase
 
   @Override
   protected TenSetUpdateResponse prepareResponse(TenSetEntity entityToUpdate) {
-    return new TenSetUpdateResponse();
+    return new TenSetUpdateResponse() {
+      {
+        setId(entityToUpdate.getId());
+      }
+    };
   }
 }
