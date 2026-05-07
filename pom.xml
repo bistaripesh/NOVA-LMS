@@ -21,6 +21,7 @@
         <module>materials</module>
         <module>level-subjects-material</module>
         <module>level-subject-material-resource</module>
+        <module>level-subject-chapters</module>
 
     </modules>
 

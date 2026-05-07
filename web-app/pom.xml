@@ -76,6 +76,12 @@
             <version>1.0.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.inviq</groupId>
+            <artifactId>level-subject-chapters</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
 
 

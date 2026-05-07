@@ -16,6 +16,7 @@ public enum Module {
   MATERIAL("MATERIAL", "Material"),
   LEVEL_SUBJECT_MATERIALS("LEVEL_SUBJECT_MATERIALS", "Level Subject Materials"),
   TEN_SET_MATERIALS("TEN_SET_MATERIALS", "Ten Set Materials"),
+  LEVEL_SUBJECT_CHAPTERS("LEVEL_SUBJECT_CHAPTERS", "Level Subject Chapters"),
   ;
 
   private final String code;
