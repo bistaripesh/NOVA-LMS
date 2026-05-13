@@ -134,6 +134,12 @@ public class TenSetDaoImpl implements TenSetDao {
         predicates.add(
             cb.like(cb.lower(root.get("year")), filter.getSearchParameter().toLowerCase()));
       }
+      if (StringUtil.isNotBlankOrNull(filter.getLevelSubjectMaterialId())) {
+        predicates.add(
+            cb.equal(
+                root.get("levelSubjectMaterial").get("id"), filter.getLevelSubjectMaterialId()));
+      }
+
       return cb.and(predicates.toArray(new Predicate[0]));
     };
   }

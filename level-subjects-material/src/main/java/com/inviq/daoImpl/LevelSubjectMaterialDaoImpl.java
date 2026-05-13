@@ -6,14 +6,13 @@ import com.inviq.core.entity.PageableUtil;
 import com.inviq.core.util.StringUtil;
 import com.inviq.dao.LevelSubjectMaterialDao;
 import com.inviq.dao.LevelSubjectMaterialRepository;
+import com.inviq.dao.converter.LevelSubjectMaterialEntityConverter;
 import com.inviq.dao.entity.LevelSubjectMaterialEntity;
 import com.inviq.dao.filter.LevelSubjectMaterialFilter;
-import com.inviq.dto.tenset.response.LevelSubjectMaterialSearchResponse;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -76,18 +75,7 @@ public class LevelSubjectMaterialDaoImpl implements LevelSubjectMaterialDao {
             this.getLevelSubjectMaterialSpecification(filter), pageRequest);
 
     List<Response> responses =
-        page.getContent().stream()
-            .map(
-                entity -> {
-                  LevelSubjectMaterialSearchResponse dto = new LevelSubjectMaterialSearchResponse();
-                  dto.setId(entity.getId());
-                  dto.setMaterialId(entity.getMaterial().getId());
-                  dto.setMaterialName(entity.getMaterial().getMaterial());
-                  dto.setLevelSubjectId(entity.getLevelSubject().getId());
-                  dto.setSubjectName(entity.getLevelSubject().getSubject().getSubject());
-                  return dto;
-                })
-            .collect(Collectors.toList());
+        new LevelSubjectMaterialEntityConverter().getResponses(page.getContent());
 
     return new Pageable(
         filter.getPageNumber(), page.getSize(), (int) page.getTotalElements(), responses);

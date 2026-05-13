@@ -6,14 +6,13 @@ import com.inviq.core.entity.PageableUtil;
 import com.inviq.core.util.StringUtil;
 import com.inviq.dao.LevelDao;
 import com.inviq.dao.LevelRepository;
+import com.inviq.dao.converter.LevelEntityConverter;
 import com.inviq.dao.entity.LevelEntity;
 import com.inviq.dao.filter.LevelFilter;
-import com.inviq.dto.tenset.response.LevelSearchResponse;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -74,16 +73,7 @@ public class LevelDaoImpl implements LevelDao {
     Page<LevelEntity> page =
         this.levelRepository.findAll(this.getLevelSpecification(filter), pageRequest);
 
-    List<Response> responses =
-        page.getContent().stream()
-            .map(
-                entity -> {
-                  LevelSearchResponse dto = new LevelSearchResponse();
-                  dto.setId(entity.getId());
-                  dto.setLevelName(entity.getLevel());
-                  return dto;
-                })
-            .collect(Collectors.toList());
+    List<Response> responses = new LevelEntityConverter().getResponses(page.getContent());
 
     return new Pageable(
         filter.getPageNumber(), page.getSize(), (int) page.getTotalElements(), responses);

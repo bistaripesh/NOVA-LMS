@@ -5,15 +5,15 @@ import com.inviq.audit.dao.AuditDao;
 import com.inviq.core.dto.response.Response;
 import com.inviq.core.entity.Pageable;
 import com.inviq.dao.LevelSubjectChapterDao;
-import com.inviq.dao.filter.LevelSubjectChapterFilter;
+import com.inviq.dao.affiliate.converter.LevelSubjectChapterEntityConverter;
+import com.inviq.dao.affiliate.filter.LevelSubjectChapterFilter;
 import com.inviq.dto.request.LevelSubjectChapterAddRequest;
 import com.inviq.dto.request.LevelSubjectChapterDeleteRequest;
 import com.inviq.dto.request.LevelSubjectChapterUpdateRequest;
-import com.inviq.dto.response.LevelSubjectChapterSearchResponse;
 import com.inviq.service.LevelSubjectChapterCrudService;
-import com.inviq.serviceImpl.usecase.LevelSubjectChapterAddUseCase;
-import com.inviq.serviceImpl.usecase.LevelSubjectChapterDeleteUseCase;
-import com.inviq.serviceImpl.usecase.LevelSubjectChapterUpdateUseCase;
+import com.inviq.serviceImpl.affiliate.usecase.LevelSubjectChapterAddUseCase;
+import com.inviq.serviceImpl.affiliate.usecase.LevelSubjectChapterDeleteUseCase;
+import com.inviq.serviceImpl.affiliate.usecase.LevelSubjectChapterUpdateUseCase;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,38 +62,13 @@ public class LevelSubjectChapterServiceImpl implements LevelSubjectChapterCrudSe
   public Optional<Response> findOne(LevelSubjectChapterFilter request) {
     return this.levelSubjectChapterDao
         .findOne(request)
-        .map(
-            entity -> {
-              LevelSubjectChapterSearchResponse dto = new LevelSubjectChapterSearchResponse();
-              dto.setId(entity.getId());
-              dto.setChapterName(entity.getChapter());
-              dto.setDescription(entity.getDescription());
-              dto.setLevelSubjectId(entity.getLevelSubject().getId());
-              dto.setLevelId(entity.getLevelSubject().getLevel().getId());
-              dto.setLevelName(entity.getLevelSubject().getLevel().getLevel());
-              dto.setSubjectId(entity.getLevelSubject().getSubject().getId());
-              dto.setSubjectName(entity.getLevelSubject().getSubject().getSubject());
-              return dto;
-            });
+        .map(entity -> new LevelSubjectChapterEntityConverter().getResponse(entity));
   }
 
   @Override
   public List<Response> findAll(LevelSubjectChapterFilter request) {
-    return this.levelSubjectChapterDao.findAll(request).stream()
-        .map(
-            entity -> {
-              LevelSubjectChapterSearchResponse dto = new LevelSubjectChapterSearchResponse();
-              dto.setId(entity.getId());
-              dto.setChapterName(entity.getChapter());
-              dto.setDescription(entity.getDescription());
-              dto.setLevelSubjectId(entity.getLevelSubject().getId());
-              dto.setLevelId(entity.getLevelSubject().getLevel().getId());
-              dto.setLevelName(entity.getLevelSubject().getLevel().getLevel());
-              dto.setSubjectId(entity.getLevelSubject().getSubject().getId());
-              dto.setSubjectName(entity.getLevelSubject().getSubject().getSubject());
-              return (Response) dto;
-            })
-        .toList();
+    return new LevelSubjectChapterEntityConverter()
+        .getResponses(this.levelSubjectChapterDao.findAll(request));
   }
 
   @Override

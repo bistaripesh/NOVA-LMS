@@ -5,14 +5,14 @@ import com.inviq.audit.dao.AuditDao;
 import com.inviq.core.dto.response.Response;
 import com.inviq.core.entity.Pageable;
 import com.inviq.dao.LevelSubjectMaterialDao;
+import com.inviq.dao.converter.LevelSubjectMaterialEntityConverter;
 import com.inviq.dao.filter.LevelSubjectMaterialFilter;
 import com.inviq.dto.tenset.request.LevelSubjectMaterialAddRequest;
 import com.inviq.dto.tenset.request.LevelSubjectMaterialDeleteRequest;
 import com.inviq.dto.tenset.request.LevelSubjectMaterialUpdateRequest;
-import com.inviq.dto.tenset.response.LevelSubjectMaterialSearchResponse;
 import com.inviq.service.LevelSubjectMaterialCrudService;
-import com.inviq.serviceImpl.usecase.LevelSubjectMaterialAddUseCase;
-import com.inviq.serviceImpl.usecase.LevelSubjectMaterialDeleteUseCase;
+import com.inviq.serviceImpl.affiliate.usecase.LevelSubjectMaterialAddUseCase;
+import com.inviq.serviceImpl.affiliate.usecase.LevelSubjectMaterialDeleteUseCase;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,32 +61,13 @@ public class LevelSubjectMaterialService implements LevelSubjectMaterialCrudServ
   public Optional<Response> findOne(LevelSubjectMaterialFilter request) {
     return this.levelSubjectMaterialDao
         .findOne(request)
-        .map(
-            entity -> {
-              LevelSubjectMaterialSearchResponse dto = new LevelSubjectMaterialSearchResponse();
-              dto.setId(entity.getId());
-              dto.setMaterialId(entity.getMaterial().getId());
-              dto.setMaterialName(entity.getMaterial().getMaterial());
-              dto.setLevelSubjectId(entity.getLevelSubject().getId());
-              dto.setSubjectName(entity.getLevelSubject().getSubject().getSubject());
-              return dto;
-            });
+        .map(entity -> new LevelSubjectMaterialEntityConverter().getResponse(entity));
   }
 
   @Override
   public List<Response> findAll(LevelSubjectMaterialFilter request) {
-    return this.levelSubjectMaterialDao.findAll(request).stream()
-        .map(
-            entity -> {
-              LevelSubjectMaterialSearchResponse dto = new LevelSubjectMaterialSearchResponse();
-              dto.setId(entity.getId());
-              dto.setMaterialId(entity.getMaterial().getId());
-              dto.setMaterialName(entity.getMaterial().getMaterial());
-              dto.setLevelSubjectId(entity.getLevelSubject().getId());
-              dto.setSubjectName(entity.getLevelSubject().getSubject().getSubject());
-              return (Response) dto;
-            })
-        .toList();
+    return new LevelSubjectMaterialEntityConverter()
+        .getResponses(this.levelSubjectMaterialDao.findAll(request));
   }
 
   @Override

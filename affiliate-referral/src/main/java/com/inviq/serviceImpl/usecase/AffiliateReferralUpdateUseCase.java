@@ -1,0 +1,67 @@
+package com.inviq.serviceImpl.usecase;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.inviq.audit.dao.AuditDao;
+import com.inviq.core.entity.BaseDao;
+import com.inviq.core.entity.Module;
+import com.inviq.core.service.usecase.AbstractUpdateUseCase;
+import com.inviq.dao.entity.AffiliateReferralEntity;
+import com.inviq.dao.filter.AffiliateReferralFilter;
+import com.inviq.dto.request.AffiliateReferralUpdateRequest;
+import com.inviq.dto.response.AffiliateReferralUpdateResponse;
+
+/**
+ * @author ripesh created on 13/05/2026
+ */
+public class AffiliateReferralUpdateUseCase
+    extends AbstractUpdateUseCase<
+        AffiliateReferralEntity,
+        AffiliateReferralUpdateRequest,
+        AffiliateReferralUpdateResponse,
+        AffiliateReferralFilter> {
+
+  public AffiliateReferralUpdateUseCase(
+      BaseDao<AffiliateReferralEntity, AffiliateReferralFilter> entityDao,
+      AuditDao auditDao,
+      ObjectMapper objectMapper) {
+    super(entityDao, auditDao, objectMapper);
+  }
+
+  @Override
+  protected void preValidateRequest(AffiliateReferralUpdateRequest request) {}
+
+  @Override
+  protected void validateRequestWithEntity(
+      AffiliateReferralUpdateRequest request, AffiliateReferralEntity entityInRecord) {}
+
+  @Override
+  protected void preProcessRequest(AffiliateReferralUpdateRequest request) {}
+
+  @Override
+  protected Module getModule() {
+    return Module.AFFILIATE_REFERRAL;
+  }
+
+  @Override
+  protected AffiliateReferralFilter prepareFilterToFindDuplicateRecord(
+      AffiliateReferralUpdateRequest request) {
+    return new AffiliateReferralFilter();
+  }
+
+  @Override
+  protected AffiliateReferralEntity prepareEntityForUpdate(
+      AffiliateReferralEntity entity, AffiliateReferralUpdateRequest request) {
+    entity.setDescription(request.getDescription());
+    return entity;
+  }
+
+  @Override
+  protected AffiliateReferralUpdateResponse prepareResponse(
+      AffiliateReferralEntity entityToUpdate) {
+    return new AffiliateReferralUpdateResponse() {
+      {
+        setId(entityToUpdate.getId());
+      }
+    };
+  }
+}

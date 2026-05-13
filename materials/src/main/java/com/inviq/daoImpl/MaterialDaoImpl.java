@@ -6,14 +6,13 @@ import com.inviq.core.entity.PageableUtil;
 import com.inviq.core.util.StringUtil;
 import com.inviq.dao.MaterialDao;
 import com.inviq.dao.MaterialRepository;
+import com.inviq.dao.converter.MaterialEntityConverter;
 import com.inviq.dao.entity.MaterialEntity;
 import com.inviq.dao.filter.MaterialFilter;
-import com.inviq.dto.tenset.response.MaterialSearchResponse;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -72,16 +71,7 @@ public class MaterialDaoImpl implements MaterialDao {
     Page<MaterialEntity> page =
         this.materialRepository.findAll(this.getMaterialSpecification(filter), pageRequest);
 
-    List<Response> responses =
-        page.getContent().stream()
-            .map(
-                entity -> {
-                  MaterialSearchResponse dto = new MaterialSearchResponse();
-                  dto.setId(entity.getId());
-                  dto.setMaterial(entity.getMaterial());
-                  return dto;
-                })
-            .collect(Collectors.toList());
+    List<Response> responses = new MaterialEntityConverter().getResponses(page.getContent());
 
     return new Pageable(
         filter.getPageNumber(), page.getSize(), (int) page.getTotalElements(), responses);

@@ -17,8 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * @author ripesh created on 15/04/2026
  */
 @RestController
-@RequestMapping(
-    value = "/user")
+@RequestMapping(value = "/user")
 public class UserController {
 
   private final UserCrudService userCrudService;

@@ -6,14 +6,13 @@ import com.inviq.core.entity.PageableUtil;
 import com.inviq.core.util.StringUtil;
 import com.inviq.dao.SubjectDao;
 import com.inviq.dao.SubjectRepository;
+import com.inviq.dao.converter.SubjectEntityConverter;
 import com.inviq.dao.entity.SubjectEntity;
 import com.inviq.dao.filter.SubjectFilter;
-import com.inviq.dto.tenset.response.SubjectSearchResponse;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -72,16 +71,7 @@ public class SubjectDaoImpl implements SubjectDao {
     Page<SubjectEntity> page =
         this.subjectRepository.findAll(this.getSubjectSpecification(filter), pageRequest);
 
-    List<Response> responses =
-        page.getContent().stream()
-            .map(
-                entity -> {
-                  SubjectSearchResponse dto = new SubjectSearchResponse();
-                  dto.setId(entity.getId());
-                  dto.setSubjectName(entity.getSubject());
-                  return dto;
-                })
-            .collect(Collectors.toList());
+    List<Response> responses = new SubjectEntityConverter().getResponses(page.getContent());
 
     return new Pageable(
         filter.getPageNumber(), page.getSize(), (int) page.getTotalElements(), responses);

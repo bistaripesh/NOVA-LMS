@@ -6,14 +6,13 @@ import com.inviq.core.entity.PageableUtil;
 import com.inviq.core.util.StringUtil;
 import com.inviq.dao.LevelSubjectsDao;
 import com.inviq.dao.LevelSubjectsRepository;
+import com.inviq.dao.converter.LevelSubjectsEntityConverter;
 import com.inviq.dao.entity.LevelSubjectsEntity;
 import com.inviq.dao.filter.LevelSubjectsFilter;
-import com.inviq.dto.tenset.response.LevelSubjectsSearchResponse;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -73,19 +72,7 @@ public class LevelSubjectsDaoImpl implements LevelSubjectsDao {
         this.levelSubjectsRepository.findAll(
             this.getLevelSubjectsSpecification(filter), pageRequest);
 
-    List<Response> responses =
-        page.getContent().stream()
-            .map(
-                entity -> {
-                  LevelSubjectsSearchResponse dto = new LevelSubjectsSearchResponse();
-                  dto.setId(entity.getId());
-                  dto.setSubjectId(entity.getSubject().getId());
-                  dto.setSubjectName(entity.getSubject().getSubject());
-                  dto.setLevelId(entity.getLevel().getId());
-                  dto.setLevelName(entity.getLevel().getLevel());
-                  return dto;
-                })
-            .collect(Collectors.toList());
+    List<Response> responses = new LevelSubjectsEntityConverter().getResponses(page.getContent());
 
     return new Pageable(
         filter.getPageNumber(), page.getSize(), (int) page.getTotalElements(), responses);

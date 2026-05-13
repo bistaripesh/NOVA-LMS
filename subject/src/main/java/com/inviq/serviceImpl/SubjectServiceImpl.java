@@ -5,15 +5,15 @@ import com.inviq.audit.dao.AuditDao;
 import com.inviq.core.dto.response.Response;
 import com.inviq.core.entity.Pageable;
 import com.inviq.dao.SubjectDao;
+import com.inviq.dao.converter.SubjectEntityConverter;
 import com.inviq.dao.filter.SubjectFilter;
 import com.inviq.dto.tenset.request.SubjectAddRequest;
 import com.inviq.dto.tenset.request.SubjectDeleteRequest;
 import com.inviq.dto.tenset.request.SubjectUpdateRequest;
-import com.inviq.dto.tenset.response.SubjectSearchResponse;
 import com.inviq.service.SubjectCrudService;
-import com.inviq.serviceImpl.usecase.SubjectAddUseCase;
-import com.inviq.serviceImpl.usecase.SubjectDeleteUseCase;
-import com.inviq.serviceImpl.usecase.SubjectUpdateUseCase;
+import com.inviq.serviceImpl.affiliate.usecase.SubjectAddUseCase;
+import com.inviq.serviceImpl.affiliate.usecase.SubjectDeleteUseCase;
+import com.inviq.serviceImpl.affiliate.usecase.SubjectUpdateUseCase;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -59,15 +59,7 @@ public class SubjectServiceImpl implements SubjectCrudService {
 
   @Override
   public List<Response> findAll(SubjectFilter request) {
-    return this.subjectDao.findAll(request).stream()
-        .map(
-            entity -> {
-              SubjectSearchResponse dto = new SubjectSearchResponse();
-              dto.setId(entity.getId());
-              dto.setSubjectName(entity.getSubject());
-              return (Response) dto;
-            })
-        .toList();
+    return new SubjectEntityConverter().getResponses(this.subjectDao.findAll(request));
   }
 
   @Override

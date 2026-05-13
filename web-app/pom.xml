@@ -82,8 +82,27 @@
             <version>1.0.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.inviq</groupId>
+            <artifactId>affiliate</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.inviq</groupId>
+            <artifactId>affiliate-referral</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <spring.profiles.active>dev</spring.profiles.active>
+            </properties>
+        </profile>
+    </profiles>
 
     <build>
         <finalName>novalms</finalName>

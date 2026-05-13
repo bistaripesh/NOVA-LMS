@@ -2,7 +2,7 @@ package com.inviq.controller;
 
 import com.inviq.core.response.RestResponse;
 import com.inviq.core.response.RestResponseBody;
-import com.inviq.dao.filter.LevelSubjectChapterFilter;
+import com.inviq.dao.affiliate.filter.LevelSubjectChapterFilter;
 import com.inviq.dto.request.LevelSubjectChapterAddRequest;
 import com.inviq.dto.request.LevelSubjectChapterDeleteRequest;
 import com.inviq.dto.request.LevelSubjectChapterUpdateRequest;

@@ -6,14 +6,13 @@ import com.inviq.core.entity.PageableUtil;
 import com.inviq.core.util.StringUtil;
 import com.inviq.dao.LevelSubjectChapterDao;
 import com.inviq.dao.LevelSubjectChapterRepository;
-import com.inviq.dao.entity.LevelSubjectChapterEntity;
-import com.inviq.dao.filter.LevelSubjectChapterFilter;
-import com.inviq.dto.response.LevelSubjectChapterSearchResponse;
+import com.inviq.dao.affiliate.converter.LevelSubjectChapterEntityConverter;
+import com.inviq.dao.affiliate.entity.LevelSubjectChapterEntity;
+import com.inviq.dao.affiliate.filter.LevelSubjectChapterFilter;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -76,21 +75,7 @@ public class LevelSubjectChapterDaoImpl implements LevelSubjectChapterDao {
             this.getLevelSubjectChapterSpecification(filter), pageRequest);
 
     List<Response> responses =
-        page.getContent().stream()
-            .map(
-                entity -> {
-                  LevelSubjectChapterSearchResponse dto = new LevelSubjectChapterSearchResponse();
-                  dto.setId(entity.getId());
-                  dto.setChapterName(entity.getChapter());
-                  dto.setDescription(entity.getDescription());
-                  dto.setLevelSubjectId(entity.getLevelSubject().getId());
-                  dto.setLevelId(entity.getLevelSubject().getLevel().getId());
-                  dto.setLevelName(entity.getLevelSubject().getLevel().getLevel());
-                  dto.setSubjectId(entity.getLevelSubject().getSubject().getId());
-                  dto.setSubjectName(entity.getLevelSubject().getSubject().getSubject());
-                  return dto;
-                })
-            .collect(Collectors.toList());
+        new LevelSubjectChapterEntityConverter().getResponses(page.getContent());
 
     return new Pageable(
         filter.getPageNumber(), page.getSize(), (int) page.getTotalElements(), responses);

@@ -5,15 +5,15 @@ import com.inviq.audit.dao.AuditDao;
 import com.inviq.core.dto.response.Response;
 import com.inviq.core.entity.Pageable;
 import com.inviq.dao.MaterialDao;
+import com.inviq.dao.converter.MaterialEntityConverter;
 import com.inviq.dao.filter.MaterialFilter;
 import com.inviq.dto.tenset.request.MaterialAddRequest;
 import com.inviq.dto.tenset.request.MaterialDeleteRequest;
 import com.inviq.dto.tenset.request.MaterialUpdateRequest;
-import com.inviq.dto.tenset.response.MaterialSearchResponse;
 import com.inviq.service.MaterialCrudService;
-import com.inviq.serviceImpl.usecase.MaterialAddUseCase;
-import com.inviq.serviceImpl.usecase.MaterialDeleteUseCase;
-import com.inviq.serviceImpl.usecase.MaterialUpdateUseCase;
+import com.inviq.serviceImpl.affiliate.usecase.MaterialAddUseCase;
+import com.inviq.serviceImpl.affiliate.usecase.MaterialDeleteUseCase;
+import com.inviq.serviceImpl.affiliate.usecase.MaterialUpdateUseCase;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,26 +59,12 @@ public class MaterialCrudServiceImpl implements MaterialCrudService {
   public Optional<Response> findOne(MaterialFilter request) {
     return this.materialDao
         .findOne(request)
-        .map(
-            entity -> {
-              MaterialSearchResponse dto = new MaterialSearchResponse();
-              dto.setId(entity.getId());
-              dto.setMaterial(entity.getMaterial());
-              return dto;
-            });
+        .map(entity -> new MaterialEntityConverter().getResponse(entity));
   }
 
   @Override
   public List<Response> findAll(MaterialFilter request) {
-    return this.materialDao.findAll(request).stream()
-        .map(
-            entity -> {
-              MaterialSearchResponse dto = new MaterialSearchResponse();
-              dto.setId(entity.getId());
-              dto.setMaterial(entity.getMaterial());
-              return (Response) dto;
-            })
-        .toList();
+    return new MaterialEntityConverter().getResponses(this.materialDao.findAll(request));
   }
 
   @Override

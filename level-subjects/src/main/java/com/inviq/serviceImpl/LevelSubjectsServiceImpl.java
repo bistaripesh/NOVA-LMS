@@ -5,14 +5,14 @@ import com.inviq.audit.dao.AuditDao;
 import com.inviq.core.dto.response.Response;
 import com.inviq.core.entity.Pageable;
 import com.inviq.dao.LevelSubjectsDao;
+import com.inviq.dao.converter.LevelSubjectsEntityConverter;
 import com.inviq.dao.filter.LevelSubjectsFilter;
 import com.inviq.dto.tenset.request.LevelSubjectsAddRequest;
 import com.inviq.dto.tenset.request.LevelSubjectsDeleteRequest;
 import com.inviq.dto.tenset.request.LevelSubjectsUpdateRequest;
-import com.inviq.dto.tenset.response.LevelSubjectsSearchResponse;
 import com.inviq.service.LevelSubjectsCrudService;
-import com.inviq.serviceImpl.usecase.LevelSubjectsAddUseCase;
-import com.inviq.serviceImpl.usecase.LevelSubjectsDeleteUseCase;
+import com.inviq.serviceImpl.affiliate.usecase.LevelSubjectsAddUseCase;
+import com.inviq.serviceImpl.affiliate.usecase.LevelSubjectsDeleteUseCase;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,35 +55,14 @@ public class LevelSubjectsServiceImpl implements LevelSubjectsCrudService {
 
   @Override
   public Optional<Response> findOne(LevelSubjectsFilter request) {
-
     return this.levelSubjectsDao
         .findOne(request)
-        .map(
-            entity -> {
-              LevelSubjectsSearchResponse dto = new LevelSubjectsSearchResponse();
-              dto.setId(entity.getId());
-              dto.setSubjectId(entity.getSubject().getId());
-              dto.setSubjectName(entity.getSubject().getSubject());
-              dto.setLevelId(entity.getLevel().getId());
-              dto.setLevelName(entity.getLevel().getLevel());
-              return dto;
-            });
+        .map(entity -> new LevelSubjectsEntityConverter().getResponse(entity));
   }
 
   @Override
   public List<Response> findAll(LevelSubjectsFilter request) {
-    return this.levelSubjectsDao.findAll(request).stream()
-        .map(
-            entity -> {
-              LevelSubjectsSearchResponse dto = new LevelSubjectsSearchResponse();
-              dto.setId(entity.getId());
-              dto.setSubjectId(entity.getSubject().getId());
-              dto.setSubjectName(entity.getSubject().getSubject());
-              dto.setLevelId(entity.getLevel().getId());
-              dto.setLevelName(entity.getLevel().getLevel());
-              return (Response) dto;
-            })
-        .toList();
+    return new LevelSubjectsEntityConverter().getResponses(this.levelSubjectsDao.findAll(request));
   }
 
   @Override

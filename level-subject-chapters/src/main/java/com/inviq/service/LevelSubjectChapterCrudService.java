@@ -1,7 +1,7 @@
 package com.inviq.service;
 
 import com.inviq.core.service.CrudService;
-import com.inviq.dao.filter.LevelSubjectChapterFilter;
+import com.inviq.dao.affiliate.filter.LevelSubjectChapterFilter;
 import com.inviq.dto.request.LevelSubjectChapterAddRequest;
 import com.inviq.dto.request.LevelSubjectChapterDeleteRequest;
 import com.inviq.dto.request.LevelSubjectChapterUpdateRequest;

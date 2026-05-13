@@ -5,15 +5,15 @@ import com.inviq.audit.dao.AuditDao;
 import com.inviq.core.dto.response.Response;
 import com.inviq.core.entity.Pageable;
 import com.inviq.dao.LevelDao;
+import com.inviq.dao.converter.LevelEntityConverter;
 import com.inviq.dao.filter.LevelFilter;
 import com.inviq.dto.tenset.request.LevelAddRequest;
 import com.inviq.dto.tenset.request.LevelDeleteRequest;
 import com.inviq.dto.tenset.request.LevelUpdateRequest;
-import com.inviq.dto.tenset.response.LevelSearchResponse;
 import com.inviq.service.LevelCrudService;
-import com.inviq.serviceImpl.usecase.LevelAddUseCase;
-import com.inviq.serviceImpl.usecase.LevelDeleteUseCase;
-import com.inviq.serviceImpl.usecase.LevelUpdateUseCase;
+import com.inviq.serviceImpl.affiliate.usecase.LevelAddUseCase;
+import com.inviq.serviceImpl.affiliate.usecase.LevelDeleteUseCase;
+import com.inviq.serviceImpl.affiliate.usecase.LevelUpdateUseCase;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,15 +58,7 @@ public class LevelService implements LevelCrudService {
 
   @Override
   public List<Response> findAll(LevelFilter request) {
-    return this.levelDao.findAll(request).stream()
-        .map(
-            entity -> {
-              LevelSearchResponse dto = new LevelSearchResponse();
-              dto.setId(entity.getId());
-              dto.setLevelName(entity.getLevel());
-              return (Response) dto;
-            })
-        .toList();
+    return new LevelEntityConverter().getResponses(this.levelDao.findAll(request));
   }
 
   @Override

@@ -22,6 +22,8 @@
         <module>level-subjects-material</module>
         <module>level-subject-material-resource</module>
         <module>level-subject-chapters</module>
+        <module>affiliate</module>
+        <module>affiliate-referral</module>
 
     </modules>
 
@@ -36,7 +38,8 @@
         <hibernate.version>7.3.1.Final</hibernate.version>
         <postgres.version>42.7.10</postgres.version>
         <pdf-box.version>3.0.0</pdf-box.version>
-
+        <s3.version>2.44.4</s3.version>
+        <tika-core.version>3.3.0</tika-core.version>
     </properties>
 
 
@@ -126,6 +129,20 @@
                 <groupId>org.apache.pdfbox</groupId>
                 <artifactId>pdfbox</artifactId>
                 <version>${pdf-box.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>s3</artifactId>
+                <version>${s3.version}</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.tika</groupId>
+                <artifactId>tika-core</artifactId>
+                <version>${tika-core.version}</version>
+                <scope>compile</scope>
             </dependency>
 
 
