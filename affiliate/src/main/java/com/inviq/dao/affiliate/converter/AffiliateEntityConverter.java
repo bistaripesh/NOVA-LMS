@@ -5,6 +5,7 @@ import com.inviq.core.dto.response.Response;
 import com.inviq.core.entity.Converter;
 import com.inviq.core.storage.BucketType;
 import com.inviq.core.storage.ObjectStorageUtil;
+import com.inviq.core.util.SystemUtil;
 import com.inviq.dao.affiliate.entity.AffiliateEntity;
 import com.inviq.dto.affiliate.response.AffiliateSearchResponse;
 
@@ -21,7 +22,7 @@ public class AffiliateEntityConverter implements Converter<AffiliateEntity> {
       response.setProfilePicture(
           ObjectStorageUtil.getPreSignedUrl(
               BucketType.CONTABO,
-              NovaLmsEnvConstants.CONTABO_S3_BUCKET_NAME,
+              SystemUtil.getEnv(NovaLmsEnvConstants.CONTABO_S3_BUCKET_NAME),
               entity.getDisplayPicture()));
     response.setFullName(entity.getFullName());
     response.setEmail(entity.getEmail());

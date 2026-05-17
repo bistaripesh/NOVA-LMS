@@ -24,6 +24,8 @@
         <module>level-subject-chapters</module>
         <module>affiliate</module>
         <module>affiliate-referral</module>
+        <module>cache-service</module>
+        <module>payment-gateway</module>
 
     </modules>
 
@@ -40,6 +42,8 @@
         <pdf-box.version>3.0.0</pdf-box.version>
         <s3.version>2.44.4</s3.version>
         <tika-core.version>3.3.0</tika-core.version>
+        <redis.version>7.5.0</redis.version>
+        <actuator.version>4.0.6</actuator.version>
     </properties>
 
 
@@ -143,6 +147,19 @@
                 <artifactId>tika-core</artifactId>
                 <version>${tika-core.version}</version>
                 <scope>compile</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>${redis.version}</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-actuator</artifactId>
+                <version>${actuator.version}</version>
             </dependency>
 
 

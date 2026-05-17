@@ -13,7 +13,9 @@ import lombok.Getter;
 public enum FileExtension {
   PDF(".pdf"),
   TEXT(".txt"),
-  PNG(".png");
+  PNG(".png"),
+  JPG(".jpg"),
+  JPEG(".jpeg"),;
 
   private final String extension;
 

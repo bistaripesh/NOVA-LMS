@@ -28,6 +28,13 @@
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.inviq</groupId>
+            <artifactId>cache-service</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
 
 </project>

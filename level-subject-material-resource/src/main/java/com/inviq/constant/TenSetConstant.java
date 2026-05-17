@@ -9,4 +9,5 @@ import com.inviq.core.util.SystemUtil;
 public class TenSetConstant {
   public static final String TEN_SET_FILE_PATH =
       SystemUtil.getEnv(NovaLmsEnvConstants.HOME_DIRECTORY) + "/tenset/uploads";
+  public static final int TEN_SET_CACHE_EXPIRY = 3600;
 }

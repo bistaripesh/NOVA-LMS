@@ -4,16 +4,15 @@ import com.inviq.core.dto.response.Response;
 import com.inviq.core.entity.Pageable;
 import com.inviq.core.entity.PageableUtil;
 import com.inviq.core.util.StringUtil;
+import com.inviq.dao.tenset.converter.TenSetEntityConverter;
 import com.inviq.dao.tenset.TenSetDao;
 import com.inviq.dao.tenset.TenSetRepository;
 import com.inviq.dao.tenset.entity.TenSetEntity;
 import com.inviq.dao.tenset.filter.TenSetFilter;
-import com.inviq.dto.tenset.response.TenSetSearchResponse;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -73,17 +72,7 @@ public class TenSetDaoImpl implements TenSetDao {
         this.tenSetRepository.findAll(this.getTenSetSpecification(filter), pageRequest);
 
     List<Response> responses =
-        page.getContent().stream()
-            .map(
-                entity -> {
-                  TenSetSearchResponse dto = new TenSetSearchResponse();
-                  dto.setId(entity.getId());
-                  dto.setTitle(entity.getTitle());
-                  //                  dto.setPdfUrl(entity.getPdfUrl());
-                  dto.setYear(entity.getYear());
-                  return dto;
-                })
-            .collect(Collectors.toList());
+       new TenSetEntityConverter().getResponses( page.getContent());
 
     return new Pageable(
         filter.getPageNumber(), page.getSize(), (int) page.getTotalElements(), responses);

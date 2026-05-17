@@ -14,4 +14,6 @@ public class TenSetDetailSearchResponse extends BaseResponse {
   private byte[] pdfByte;
   private Integer year;
   private int bookTotalPageNumber;
+  private String level;
+  private String subject;
 }

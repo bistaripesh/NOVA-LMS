@@ -5,6 +5,7 @@ import com.inviq.core.exception.AppException;
 import com.inviq.core.exception.DynamicAppException;
 import com.inviq.core.security.token.JWTTokenInfo;
 import com.inviq.core.security.token.JWTTokenUtils;
+import com.inviq.core.util.StringUtil;
 import com.inviq.dao.UserDao;
 import com.inviq.dao.entity.UserEntity;
 import com.inviq.dao.filter.UserFilter;
@@ -52,7 +53,15 @@ public class AuthUseCase {
     JWTTokenInfo jwtTokenInfo = this.getJWTTokenInfo(userEntity);
     String token = JWTTokenUtils.getJWTToken(jwtTokenInfo);
     String refreshToken = this.getRefreshToken(jwtTokenInfo);
-    return new AuthResponse(token, refreshToken, userEntity.getRole());
+    String fullName =
+        userEntity
+            .getFirstName()
+            .concat(
+                StringUtil.isNotBlankOrNull(userEntity.getMiddleName())
+                    ? " " + userEntity.getMiddleName()
+                    : "")
+            .concat(" " + userEntity.getLastName());
+    return new AuthResponse(token, refreshToken, userEntity.getRole(), fullName);
   }
 
   private JWTTokenInfo getJWTTokenInfo(UserEntity userEntity) {
