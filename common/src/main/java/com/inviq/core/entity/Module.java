@@ -21,6 +21,7 @@ public enum Module {
   AFFILIATE_TYPE("AFFILIATE_TYPE", "Affiliate Type"),
   AFFILIATE_REFERRAL("AFFILIATE_REFERRAL", "Affiliate Referral"),
   QUESTION("QUESTION", "Question"),
+  ANSWER("ANSWER", "Answer"),
   ;
 
   private final String code;

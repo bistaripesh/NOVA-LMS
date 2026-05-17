@@ -1,10 +1,11 @@
-package com.inviq.serviceImpl.qna.usecase;
+package com.inviq.serviceImpl.qna.question.usecase;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inviq.audit.dao.AuditDao;
 import com.inviq.core.entity.BaseDao;
 import com.inviq.core.entity.Module;
 import com.inviq.core.service.usecase.AbstractDeleteUseCase;
+import com.inviq.dao.qna.answer.filter.AnswerFilter;
 import com.inviq.dao.qna.question.entity.QuestionEntity;
 import com.inviq.dao.qna.question.filter.QuestionFilter;
 import com.inviq.dto.qna.question.request.QuestionDeleteRequest;

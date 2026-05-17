@@ -24,6 +24,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @NoArgsConstructor
 public class AnswerEntity extends BaseEntity<AnswerEntity> {
 
+  private Integer step;
   private String answer;
 
   @ManyToOne(fetch = FetchType.LAZY)

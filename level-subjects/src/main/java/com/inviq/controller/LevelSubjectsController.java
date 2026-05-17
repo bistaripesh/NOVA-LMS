@@ -39,14 +39,14 @@ public class LevelSubjectsController {
     return RestResponse.ok(this.levelSubjectsCrudService.delete(levelSubjectsDeleteRequest));
   }
 
-  @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+  @PreAuthorize("hasAnyAuthority('ADMIN','USER','WRITER')")
   @GetMapping("/all")
   public ResponseEntity<RestResponseBody> getLevelSubjects(
       @ModelAttribute LevelSubjectsFilter levelSubjectsFilter) {
     return RestResponse.ok(this.levelSubjectsCrudService.findAll(levelSubjectsFilter));
   }
 
-  @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+  @PreAuthorize("hasAnyAuthority('ADMIN','USER','WRITER')")
   @GetMapping
   public ResponseEntity<RestResponseBody> getLevelSubjectsWithPagination(
       @ModelAttribute LevelSubjectsFilter levelSubjectsFilter) {

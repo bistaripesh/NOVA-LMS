@@ -6,7 +6,7 @@ import com.inviq.dao.qna.question.filter.QuestionFilter;
 import com.inviq.dto.qna.question.request.QuestionAddRequest;
 import com.inviq.dto.qna.question.request.QuestionDeleteRequest;
 import com.inviq.dto.qna.question.request.QuestionUpdateRequest;
-import com.inviq.service.qna.QuestionCrudService;
+import com.inviq.service.qna.question.QuestionCrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,35 +26,37 @@ public class QuestionController {
     this.questionCrudService = questionCrudService;
   }
 
-  @PreAuthorize("hasAuthority('ADMIN')")
+  @PreAuthorize("hasAnyAuthority('ADMIN','WRITER')")
   @PostMapping
   public ResponseEntity<RestResponseBody> createQuestion(@RequestBody QuestionAddRequest request) {
     return RestResponse.ok(this.questionCrudService.create(request));
   }
 
-  @PreAuthorize("hasAuthority('ADMIN')")
+  @PreAuthorize("hasAnyAuthority('ADMIN','WRITER')")
   @PutMapping
-  public ResponseEntity<RestResponseBody> updateQuestion(@RequestBody QuestionUpdateRequest request) {
+  public ResponseEntity<RestResponseBody> updateQuestion(
+      @RequestBody QuestionUpdateRequest request) {
     return RestResponse.ok(this.questionCrudService.update(request));
   }
 
   @PreAuthorize("hasAuthority('ADMIN')")
   @DeleteMapping
-  public ResponseEntity<RestResponseBody> deleteQuestion(@ModelAttribute QuestionDeleteRequest request) {
+  public ResponseEntity<RestResponseBody> deleteQuestion(
+      @ModelAttribute QuestionDeleteRequest request) {
     return RestResponse.ok(this.questionCrudService.delete(request));
   }
 
-  @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+  @PreAuthorize("hasAnyAuthority('ADMIN','USER','WRITER')")
   @GetMapping("/all")
-  public ResponseEntity<RestResponseBody> getQuestions(@ModelAttribute QuestionFilter questionFilter) {
+  public ResponseEntity<RestResponseBody> getQuestions(
+      @ModelAttribute QuestionFilter questionFilter) {
     return RestResponse.ok(this.questionCrudService.findAll(questionFilter));
   }
 
-  @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+  @PreAuthorize("hasAnyAuthority('ADMIN','USER','WRITER')")
   @GetMapping
   public ResponseEntity<RestResponseBody> getQuestionsWithPagination(
       @ModelAttribute QuestionFilter questionFilter) {
     return RestResponse.ok(this.questionCrudService.findWithPagination(questionFilter));
   }
-
 }

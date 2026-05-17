@@ -47,13 +47,13 @@ public class LevelController {
     return RestResponse.ok(this.levelService.delete(levelDeleteRequest));
   }
 
-  @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+  @PreAuthorize("hasAnyAuthority('ADMIN','USER','WRITER')")
   @GetMapping("/all")
   public ResponseEntity<RestResponseBody> getLevels(@ModelAttribute LevelFilter levelFilter) {
     return RestResponse.ok(this.levelService.findAll(levelFilter));
   }
 
-  @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+  @PreAuthorize("hasAnyAuthority('ADMIN','USER','WRITER')")
   @GetMapping
   public ResponseEntity<RestResponseBody> getLevelsWithPagination(
       @ModelAttribute LevelFilter levelFilter) {

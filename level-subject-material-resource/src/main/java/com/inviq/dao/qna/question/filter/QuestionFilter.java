@@ -14,4 +14,6 @@ public class QuestionFilter extends BaseFilterRequest {
   private String levelSubjectMaterialId;
   private String levelId;
   private String subjectId;
+  private String question;
+  private Boolean isDraft;
 }

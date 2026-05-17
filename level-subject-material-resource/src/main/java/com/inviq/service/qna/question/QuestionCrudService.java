@@ -1,4 +1,4 @@
-package com.inviq.service.qna;
+package com.inviq.service.qna.question;
 
 import com.inviq.core.service.CrudService;
 import com.inviq.dao.qna.question.filter.QuestionFilter;

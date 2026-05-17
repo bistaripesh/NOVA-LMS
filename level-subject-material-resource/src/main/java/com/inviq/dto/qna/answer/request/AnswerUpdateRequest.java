@@ -15,6 +15,7 @@ import lombok.Setter;
 public class AnswerUpdateRequest extends BaseUpdateRequest {
   private Integer step;
   private String answer;
+  private String questionId;
 
   @Override
   public void validateRequest() {

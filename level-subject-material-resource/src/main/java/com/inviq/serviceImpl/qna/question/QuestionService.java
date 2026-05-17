@@ -1,4 +1,4 @@
-package com.inviq.serviceImpl.qna;
+package com.inviq.serviceImpl.qna.question;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inviq.audit.dao.AuditDao;
@@ -10,10 +10,10 @@ import com.inviq.dao.qna.question.filter.QuestionFilter;
 import com.inviq.dto.qna.question.request.QuestionAddRequest;
 import com.inviq.dto.qna.question.request.QuestionDeleteRequest;
 import com.inviq.dto.qna.question.request.QuestionUpdateRequest;
-import com.inviq.service.qna.QuestionCrudService;
-import com.inviq.serviceImpl.qna.usecase.QuestionAddUseCase;
-import com.inviq.serviceImpl.qna.usecase.QuestionDeleteUseCase;
-import com.inviq.serviceImpl.qna.usecase.QuestionUpdateUseCase;
+import com.inviq.service.qna.question.QuestionCrudService;
+import com.inviq.serviceImpl.qna.question.usecase.QuestionAddUseCase;
+import com.inviq.serviceImpl.qna.question.usecase.QuestionDeleteUseCase;
+import com.inviq.serviceImpl.qna.question.usecase.QuestionUpdateUseCase;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;

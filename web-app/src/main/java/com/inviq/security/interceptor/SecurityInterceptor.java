@@ -5,6 +5,7 @@ import com.inviq.core.constants.NovaLmsAppSecurityEnvConstants;
 import com.inviq.core.context.UserPrincipal;
 import com.inviq.core.response.RestResponseBody;
 import com.inviq.core.security.token.JWTTokenUtils;
+import com.inviq.core.user.UserType;
 import com.inviq.security.util.SecurityInterceptorUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -41,7 +42,9 @@ public class SecurityInterceptor extends OncePerRequestFilter {
       SecurityContextHolder.getContext()
           .setAuthentication(
               new UsernamePasswordAuthenticationToken(
-                  new UserPrincipal("anonymous", "", "portal_users"), null, null));
+                  new UserPrincipal("anonymous", "", "portal_users", UserType.ANONYMOUS),
+                  null,
+                  null));
       filterChain.doFilter(request, response);
       return;
     }
@@ -87,7 +90,13 @@ public class SecurityInterceptor extends OncePerRequestFilter {
 
     UsernamePasswordAuthenticationToken authenticationToken =
         new UsernamePasswordAuthenticationToken(
-            new UserPrincipal(claims.getSubject(), "", "portal_users"), null, authorities);
+            new UserPrincipal(
+                claims.getSubject(),
+                "",
+                "portal_users",
+                UserType.getByCode(authorities.getFirst().getAuthority())),
+            null,
+            authorities);
 
     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 

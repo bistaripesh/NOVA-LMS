@@ -26,7 +26,7 @@ public abstract class AbstractDeleteUseCase<
     ResponseT extends Response,
     F extends Filter> {
 
-  private final BaseDao<E, F> entityDao;
+  protected final BaseDao<E, F> entityDao;
   private final AuditDao auditDao;
   private final ObjectMapper objectMapper;
 

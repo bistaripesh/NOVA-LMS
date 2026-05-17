@@ -47,13 +47,13 @@ public class SubjectController {
     return RestResponse.ok(this.subjectCrudService.delete(subjectDeleteRequest));
   }
 
-  @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+  @PreAuthorize("hasAnyAuthority('ADMIN','USER','WRITER')")
   @GetMapping("/all")
   public ResponseEntity<RestResponseBody> getSubjects(@ModelAttribute SubjectFilter subjectFilter) {
     return RestResponse.ok(this.subjectCrudService.findAll(subjectFilter));
   }
 
-  @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+  @PreAuthorize("hasAnyAuthority('ADMIN','USER','WRITER')")
   @GetMapping
   public ResponseEntity<RestResponseBody> getSubjectsWithPagination(
       @ModelAttribute SubjectFilter subjectFilter) {

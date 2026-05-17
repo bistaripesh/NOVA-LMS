@@ -2,6 +2,8 @@ package com.inviq.core.context;
 
 import java.util.Collection;
 import java.util.List;
+
+import com.inviq.core.user.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +23,7 @@ public class UserPrincipal implements UserDetails {
   private String userId;
   private String traceId;
   private String schema;
+  private UserType userType;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

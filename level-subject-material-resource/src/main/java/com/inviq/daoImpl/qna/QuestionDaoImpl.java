@@ -93,6 +93,10 @@ public class QuestionDaoImpl implements QuestionDao {
           if (StringUtil.isNotBlankOrNull(filter.getYear()))
             predicates.add(cb.equal(root.get("year"), filter.getYear()));
 
+          if (StringUtil.isNotBlankOrNull(filter.getQuestion())) {
+            predicates.add(cb.equal(root.get("question"), filter.getQuestion().toLowerCase()));
+          }
+
           if (StringUtil.isNotBlankOrNull(filter.getLevelSubjectMaterialId()))
             predicates.add(
                 cb.equal(
@@ -136,6 +140,10 @@ public class QuestionDaoImpl implements QuestionDao {
         predicates.add(
             cb.equal(
                 root.get("levelSubjectMaterial").get("id"), filter.getLevelSubjectMaterialId()));
+
+      if(filter.getIsDraft()!=null){
+        predicates.add(cb.equal(root.get("isDraft"), filter.getIsDraft()));
+      }
 
       return cb.and(predicates.toArray(new Predicate[0]));
     };
