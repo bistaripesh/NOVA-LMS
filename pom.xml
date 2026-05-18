@@ -35,7 +35,7 @@
         <jwt.version>0.12.6</jwt.version>
         <jakarta-servlet.version>6.1.0</jakarta-servlet.version>
         <apache-common-lang.version>3.18.0</apache-common-lang.version>
-        <springboot.version>3.4.4</springboot.version>
+        <springboot.version>3.3.13</springboot.version>
         <lombok.version>1.18.36</lombok.version>
         <hibernate.version>7.3.1.Final</hibernate.version>
         <postgres.version>42.7.10</postgres.version>
@@ -44,10 +44,12 @@
         <tika-core.version>3.3.0</tika-core.version>
         <redis.version>7.5.0</redis.version>
         <actuator.version>4.0.6</actuator.version>
+        <springdoc-openapi.version>2.6.0</springdoc-openapi.version>
     </properties>
 
 
     <dependencyManagement>
+
 
         <dependencies>
 
@@ -156,12 +158,12 @@
                 <scope>compile</scope>
             </dependency>
 
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-actuator</artifactId>
-                <version>${actuator.version}</version>
-            </dependency>
 
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc-openapi.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>

@@ -1,6 +1,8 @@
 package com.inviq.security.util;
 
 import com.inviq.security.constant.PublicEndpoints;
+import org.springframework.util.AntPathMatcher;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -10,8 +12,11 @@ import java.util.List;
 public class SecurityInterceptorUtil {
 
   public static boolean isPublicEndpoint(String endpoint) {
-    List<String> publicEndpoints =
-        Arrays.stream(PublicEndpoints.values()).map(PublicEndpoints::getEndpoint).toList();
-    return publicEndpoints.contains(endpoint);
+    AntPathMatcher matcher = new AntPathMatcher();
+
+    List<String> patterns =
+            Arrays.stream(PublicEndpoints.values()).map(PublicEndpoints::getEndpoint).toList();
+
+    return patterns.stream().anyMatch(pattern -> matcher.match(pattern, endpoint));
   }
 }

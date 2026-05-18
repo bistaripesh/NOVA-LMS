@@ -15,6 +15,9 @@ public enum PublicEndpoints {
   AUTH_REFRESH_TOKEN(WebConstant.APPLICATION_CONTEXT + "/auth/refresh-token"),
   PING(WebConstant.APPLICATION_CONTEXT + "/ping"),
   PUBLIC_USER(WebConstant.APPLICATION_CONTEXT + "/public/user"),
+  SWAGGER_UI(WebConstant.APPLICATION_CONTEXT +"/swagger-ui/**"),
+  SWAGGER_API_DOCS(WebConstant.APPLICATION_CONTEXT +"/v3/api-docs/**"),
+  SWAGGER_UI_HTML(WebConstant.APPLICATION_CONTEXT +"/swagger-ui.html"),
   APPLICATION_CONTEXT(WebConstant.APPLICATION_CONTEXT + "/");
 
   private final String endpoint;
