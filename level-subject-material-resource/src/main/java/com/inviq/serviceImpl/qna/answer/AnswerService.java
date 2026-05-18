@@ -17,6 +17,7 @@ import com.inviq.service.qna.answer.AnswerCrudService;
 import com.inviq.serviceImpl.qna.answer.usecase.AnswerAddUseCase;
 import com.inviq.serviceImpl.qna.answer.usecase.AnswerDeleteUseCase;
 import com.inviq.serviceImpl.qna.answer.usecase.AnswerUpdateUseCase;
+import jakarta.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,17 +40,20 @@ public class AnswerService implements AnswerCrudService {
     this.objectMapper = objectMapper;
   }
 
+  @Transactional
   @Override
   public Response create(AnswerAddRequest request) {
     return new AnswerAddUseCase(this.answerDao, this.auditDao, this.objectMapper).execute(request);
   }
 
+  @Transactional
   @Override
   public Response update(AnswerUpdateRequest request) {
     return new AnswerUpdateUseCase(this.answerDao, this.auditDao, this.objectMapper)
         .execute(request);
   }
 
+  @Transactional
   @Override
   public Response delete(AnswerDeleteRequest request) {
     return new AnswerDeleteUseCase(this.answerDao, this.auditDao, this.objectMapper)
@@ -91,14 +95,17 @@ public class AnswerService implements AnswerCrudService {
                       id -> {
                         AnswerDetailedSearchResponse r = new AnswerDetailedSearchResponse();
                         r.setQuestionId(entity.getQuestion().getId());
-                        r.setQuestion(HtmlImageProcessor.appendBaseUrlToImages(entity.getQuestion().getQuestion()));
+                        r.setQuestion(
+                            HtmlImageProcessor.appendBaseUrlToImages(
+                                entity.getQuestion().getQuestion()));
                         return r;
                       });
 
               AnswerSearchResponse answerResponse = new AnswerSearchResponse();
               answerResponse.setId(entity.getId());
               answerResponse.setStep(entity.getStep());
-              answerResponse.setAnswer(HtmlImageProcessor.appendBaseUrlToImages(entity.getAnswer()));
+              answerResponse.setAnswer(
+                  HtmlImageProcessor.appendBaseUrlToImages(entity.getAnswer()));
 
               response.getAnswers().add(answerResponse);
             });

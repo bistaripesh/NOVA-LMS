@@ -2,7 +2,6 @@ package com.inviq.util;
 
 import com.inviq.constants.FonePayEnvConstants;
 import com.inviq.core.util.SystemUtil;
-
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.PrivateKey;

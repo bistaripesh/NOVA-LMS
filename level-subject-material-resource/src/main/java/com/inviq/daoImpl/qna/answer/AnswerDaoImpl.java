@@ -85,9 +85,13 @@ public class AnswerDaoImpl implements AnswerDao {
           if (StringUtil.isNotBlankOrNull(filter.getId())) {
             predicates.add(cb.equal(root.get("id"), filter.getId()));
           }
-          if(filter.getStep()!=null){
+          if (filter.getStep() != null) {
             predicates.add(cb.equal(root.get("step"), filter.getStep()));
           }
+          if (StringUtil.isNotBlankOrNull(filter.getQuestionId())) {
+            predicates.add(cb.equal(root.get("question").get("id"), filter.getQuestionId()));
+          }
+
           return cb.and(predicates.toArray(new Predicate[0]));
         };
     return this.answerRepository.findOne(answerFindOneSpec);
@@ -102,8 +106,27 @@ public class AnswerDaoImpl implements AnswerDao {
     return ((root, query, cb) -> {
       List<Predicate> predicates = new ArrayList<>();
 
+      if (StringUtil.isNotBlankOrNull(filter.getSearchParameter())) {
+        predicates.add(
+            cb.like(cb.lower(root.get("answer")), filter.getSearchParameter().toLowerCase()));
+      }
+
       if (StringUtil.isNotBlankOrNull(filter.getQuestionId())) {
         predicates.add(cb.equal(root.get("question").get("id"), filter.getQuestionId()));
+      }
+
+      if (StringUtil.isNotBlankOrNull(filter.getLevelId())) {
+        predicates.add(
+            cb.equal(
+                root.get("question").get("levelSubjectMaterial").get("level").get("id"),
+                filter.getLevelId()));
+      }
+
+      if (StringUtil.isNotBlankOrNull(filter.getSubjectId())) {
+        predicates.add(
+            cb.equal(
+                root.get("question").get("levelSubjectMaterial").get("subject").get("id"),
+                filter.getSubjectId()));
       }
 
       return cb.and(predicates.toArray(new Predicate[0]));

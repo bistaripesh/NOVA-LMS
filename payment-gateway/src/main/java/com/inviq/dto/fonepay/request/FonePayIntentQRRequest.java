@@ -1,9 +1,6 @@
 package com.inviq.dto.fonepay.request;
 
-import com.inviq.constants.FonePayPaymentMode;
 import java.math.BigDecimal;
-
-import com.inviq.constants.FonePayQRType;
 import lombok.Getter;
 import lombok.Setter;
 

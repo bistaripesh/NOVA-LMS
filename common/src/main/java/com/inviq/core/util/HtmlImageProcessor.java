@@ -19,6 +19,8 @@ public class HtmlImageProcessor {
       Pattern.compile(
           "data:image/(png|jpeg|jpg|gif|webp);base64,([A-Za-z0-9+/=\\s]+)",
           Pattern.CASE_INSENSITIVE);
+  private static final Pattern IMG_KEY_PATTERN =
+      Pattern.compile("src=\"(/[^\"]+\\.(?:png|jpeg|jpg|gif|webp))\"", Pattern.CASE_INSENSITIVE);
 
   public static String processHtml(String html, String baseLocation) {
     Matcher matcher = IMG_PATTERN.matcher(html);
@@ -57,8 +59,6 @@ public class HtmlImageProcessor {
     }
   }
 
-  private static final Pattern IMG_KEY_PATTERN =
-          Pattern.compile("src=\"(/[^\"]+\\.(?:png|jpeg|jpg|gif|webp))\"", Pattern.CASE_INSENSITIVE);
   public static String appendBaseUrlToImages(String html) {
     if (StringUtil.isBlankOrNull(html)) return html;
 
@@ -69,12 +69,9 @@ public class HtmlImageProcessor {
 
     while (matcher.find()) {
       String key = matcher.group(1); // /question/1cefb908b5674eec92b5701e18f18e86.png
-      String presignedUrl = ObjectStorageUtil.getPreSignedUrl(
-              BucketType.CONTABO,
-              bucketName,
-              key
-      );
-      matcher.appendReplacement(updatedHtml, Matcher.quoteReplacement("src=\"" + presignedUrl + "\""));
+      String presignedUrl = ObjectStorageUtil.getPreSignedUrl(BucketType.CONTABO, bucketName, key);
+      matcher.appendReplacement(
+          updatedHtml, Matcher.quoteReplacement("src=\"" + presignedUrl + "\""));
     }
 
     matcher.appendTail(updatedHtml);

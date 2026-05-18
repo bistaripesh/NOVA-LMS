@@ -17,7 +17,7 @@ public class AffiliateTypeAddRequest extends BaseAddRequest {
 
   @Override
   public void validateRequest() {
-    if(StringUtil.isBlankOrNull(this.affiliateType))
+    if (StringUtil.isBlankOrNull(this.affiliateType))
       throw new AppException(AffiliateTypeExceptionManager.AffiliateTypeError.AFFILIATE_TYPE_EMPTY);
   }
 }

@@ -4,7 +4,6 @@ import com.inviq.core.dto.filter.Filter;
 import com.inviq.core.dto.response.Response;
 import com.inviq.core.entity.BaseDao;
 import com.inviq.core.entity.BaseEntity;
-import com.inviq.core.entity.Entity;
 import java.util.Optional;
 
 /**

@@ -9,4 +9,6 @@ import com.inviq.dto.qna.question.request.QuestionUpdateRequest;
 /**
  * @author ripesh created on 17/05/2026
  */
-public interface QuestionCrudService extends CrudService<QuestionAddRequest, QuestionUpdateRequest, QuestionDeleteRequest, QuestionFilter> {}
+public interface QuestionCrudService
+    extends CrudService<
+        QuestionAddRequest, QuestionUpdateRequest, QuestionDeleteRequest, QuestionFilter> {}

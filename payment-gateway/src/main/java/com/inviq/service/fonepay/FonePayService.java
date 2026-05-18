@@ -17,6 +17,4 @@ public interface FonePayService {
   FonePayBankListResponse getBankList(FonePayBankListRequest request) throws Exception;
 
   FonePayIntentQRResponse getIntentQR(FonePayIntentQRRequest request) throws Exception;
-
-
 }

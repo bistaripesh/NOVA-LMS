@@ -11,8 +11,9 @@ import com.inviq.dto.tenset.request.LevelSubjectMaterialAddRequest;
 import com.inviq.dto.tenset.request.LevelSubjectMaterialDeleteRequest;
 import com.inviq.dto.tenset.request.LevelSubjectMaterialUpdateRequest;
 import com.inviq.service.LevelSubjectMaterialCrudService;
-import com.inviq.serviceImpl.affiliate.usecase.LevelSubjectMaterialAddUseCase;
-import com.inviq.serviceImpl.affiliate.usecase.LevelSubjectMaterialDeleteUseCase;
+import com.inviq.serviceImpl.usecase.LevelSubjectMaterialAddUseCase;
+import com.inviq.serviceImpl.usecase.LevelSubjectMaterialDeleteUseCase;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,7 @@ public class LevelSubjectMaterialService implements LevelSubjectMaterialCrudServ
     this.objectMapper = objectMapper;
   }
 
+  @Transactional
   @Override
   public Response create(LevelSubjectMaterialAddRequest request) {
     return new LevelSubjectMaterialAddUseCase(
@@ -45,11 +47,13 @@ public class LevelSubjectMaterialService implements LevelSubjectMaterialCrudServ
         .execute(request);
   }
 
+  @Transactional
   @Override
   public Response update(LevelSubjectMaterialUpdateRequest request) {
     return null;
   }
 
+  @Transactional
   @Override
   public Response delete(LevelSubjectMaterialDeleteRequest request) {
     return new LevelSubjectMaterialDeleteUseCase(

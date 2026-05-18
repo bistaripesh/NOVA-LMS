@@ -5,12 +5,12 @@ import com.inviq.audit.dao.AuditDao;
 import com.inviq.core.entity.BaseDao;
 import com.inviq.core.entity.Module;
 import com.inviq.core.service.usecase.AbstractAddUseCase;
-import com.inviq.util.ReferralCodeUtil;
 import com.inviq.dao.affiliate.entity.AffiliateEntity;
 import com.inviq.dao.entity.AffiliateReferralEntity;
 import com.inviq.dao.filter.AffiliateReferralFilter;
 import com.inviq.dto.request.AffiliateReferralAddRequest;
 import com.inviq.dto.response.AffiliateReferralAddResponse;
+import com.inviq.util.ReferralCodeUtil;
 
 /**
  * @author ripesh created on 13/05/2026

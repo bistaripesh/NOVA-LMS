@@ -1,9 +1,8 @@
 package com.inviq.core.context;
 
+import com.inviq.core.user.UserType;
 import java.util.Collection;
 import java.util.List;
-
-import com.inviq.core.user.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -22,7 +22,8 @@ public class QuestionAddRequest extends BaseAddRequest {
   public void validateRequest() {
     if (StringUtil.isBlankOrNull(this.question))
       throw new AppException(QuestionExceptionManager.QuestionError.QUESTION_EMPTY);
-    if(StringUtil.isBlankOrNull(this.levelSubjectMaterialId))
-      throw new AppException(QuestionExceptionManager.QuestionError.LEVEL_SUBJECT_MATERIAL_ID_EMPTY);
+    if (StringUtil.isBlankOrNull(this.levelSubjectMaterialId))
+      throw new AppException(
+          QuestionExceptionManager.QuestionError.LEVEL_SUBJECT_MATERIAL_ID_EMPTY);
   }
 }

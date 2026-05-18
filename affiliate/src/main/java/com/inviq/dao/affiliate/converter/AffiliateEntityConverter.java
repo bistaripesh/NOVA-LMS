@@ -5,6 +5,7 @@ import com.inviq.core.dto.response.Response;
 import com.inviq.core.entity.Converter;
 import com.inviq.core.storage.BucketType;
 import com.inviq.core.storage.ObjectStorageUtil;
+import com.inviq.core.util.StringUtil;
 import com.inviq.core.util.SystemUtil;
 import com.inviq.dao.affiliate.entity.AffiliateEntity;
 import com.inviq.dto.affiliate.response.AffiliateSearchResponse;
@@ -18,7 +19,7 @@ public class AffiliateEntityConverter implements Converter<AffiliateEntity> {
     if (entity == null) return null;
     AffiliateSearchResponse response = new AffiliateSearchResponse();
     response.setId(entity.getId());
-    if (entity.getDisplayPicture() != null)
+    if (StringUtil.isNotBlankOrNull(entity.getDisplayPicture()))
       response.setProfilePicture(
           ObjectStorageUtil.getPreSignedUrl(
               BucketType.CONTABO,

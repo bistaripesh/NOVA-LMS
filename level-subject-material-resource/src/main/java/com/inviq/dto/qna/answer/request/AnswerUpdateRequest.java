@@ -21,9 +21,9 @@ public class AnswerUpdateRequest extends BaseUpdateRequest {
   public void validateRequest() {
     if (StringUtil.isBlankOrNull(super.getId()))
       throw new AppException(AnswerExceptionManager.AnswerError.ANSWER_ID_EMPTY);
-    if(StringUtil.isBlankOrNull(this.answer))
+    if (StringUtil.isBlankOrNull(this.answer))
       throw new AppException(AnswerExceptionManager.AnswerError.ANSWER_EMPTY);
-    if(this.step == null)
+    if (this.step == null)
       throw new AppException(AnswerExceptionManager.AnswerError.STEP_NUMBER_EMPTY);
   }
 }

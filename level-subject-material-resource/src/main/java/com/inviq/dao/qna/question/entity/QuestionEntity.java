@@ -30,5 +30,4 @@ public class QuestionEntity extends BaseEntity<QuestionEntity> {
 
   @ManyToOne(fetch = LAZY)
   private LevelSubjectMaterialEntity levelSubjectMaterial;
-
 }

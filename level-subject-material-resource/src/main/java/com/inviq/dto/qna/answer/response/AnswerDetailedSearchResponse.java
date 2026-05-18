@@ -1,10 +1,8 @@
 package com.inviq.dto.qna.answer.response;
 
-import com.inviq.core.dto.response.BaseResponse;
+import com.inviq.core.dto.response.Response;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.inviq.core.dto.response.Response;
 import lombok.Getter;
 import lombok.Setter;
 

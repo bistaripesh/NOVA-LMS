@@ -15,7 +15,6 @@ import com.inviq.dao.qna.question.entity.QuestionEntity;
 import com.inviq.dao.qna.question.filter.QuestionFilter;
 import com.inviq.dto.qna.question.request.QuestionUpdateRequest;
 import com.inviq.dto.qna.question.response.QuestionUpdateResponse;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**

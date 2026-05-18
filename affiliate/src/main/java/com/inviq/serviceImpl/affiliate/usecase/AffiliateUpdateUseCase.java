@@ -78,6 +78,10 @@ public class AffiliateUpdateUseCase
       AffiliateEntity entity, AffiliateUpdateRequest request) {
     if (request.getIsProfilePictureRemoveRequested()) {
       entity.setDisplayPicture("");
+    } else if (StringUtil.isNotBlankOrNull(request.getProfileImageLocation())) {
+      entity.setDisplayPicture(request.getProfileImageLocation());
+    } else {
+      entity.setDisplayPicture(entity.getDisplayPicture());
     }
     entity.setFullName(request.getFullName());
     entity.setEmail(request.getEmail());

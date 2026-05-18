@@ -4,9 +4,9 @@ import com.inviq.core.dto.response.Response;
 import com.inviq.core.entity.Pageable;
 import com.inviq.core.entity.PageableUtil;
 import com.inviq.core.util.StringUtil;
-import com.inviq.dao.tenset.converter.TenSetEntityConverter;
 import com.inviq.dao.tenset.TenSetDao;
 import com.inviq.dao.tenset.TenSetRepository;
+import com.inviq.dao.tenset.converter.TenSetEntityConverter;
 import com.inviq.dao.tenset.entity.TenSetEntity;
 import com.inviq.dao.tenset.filter.TenSetFilter;
 import jakarta.persistence.criteria.Predicate;
@@ -71,8 +71,7 @@ public class TenSetDaoImpl implements TenSetDao {
     Page<TenSetEntity> page =
         this.tenSetRepository.findAll(this.getTenSetSpecification(filter), pageRequest);
 
-    List<Response> responses =
-       new TenSetEntityConverter().getResponses( page.getContent());
+    List<Response> responses = new TenSetEntityConverter().getResponses(page.getContent());
 
     return new Pageable(
         filter.getPageNumber(), page.getSize(), (int) page.getTotalElements(), responses);

@@ -14,6 +14,7 @@ import com.inviq.service.qna.question.QuestionCrudService;
 import com.inviq.serviceImpl.qna.question.usecase.QuestionAddUseCase;
 import com.inviq.serviceImpl.qna.question.usecase.QuestionDeleteUseCase;
 import com.inviq.serviceImpl.qna.question.usecase.QuestionUpdateUseCase;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,25 +37,32 @@ public class QuestionService implements QuestionCrudService {
     this.objectMapper = objectMapper;
   }
 
-
+  @Transactional
   @Override
   public Response create(QuestionAddRequest request) {
-    return new QuestionAddUseCase(this.questionDao, this.auditDao, this.objectMapper).execute(request);
+    return new QuestionAddUseCase(this.questionDao, this.auditDao, this.objectMapper)
+        .execute(request);
   }
 
+  @Transactional
   @Override
   public Response update(QuestionUpdateRequest request) {
-    return new QuestionUpdateUseCase(this.questionDao, this.auditDao, this.objectMapper).execute(request);
+    return new QuestionUpdateUseCase(this.questionDao, this.auditDao, this.objectMapper)
+        .execute(request);
   }
 
+  @Transactional
   @Override
   public Response delete(QuestionDeleteRequest request) {
-    return new QuestionDeleteUseCase(this.questionDao, this.auditDao, this.objectMapper).execute(request);
+    return new QuestionDeleteUseCase(this.questionDao, this.auditDao, this.objectMapper)
+        .execute(request);
   }
 
   @Override
   public Optional<Response> findOne(QuestionFilter request) {
-    return this.questionDao.findOne(request).map(entity -> new QuestionEntityConverter().getResponse(entity));
+    return this.questionDao
+        .findOne(request)
+        .map(entity -> new QuestionEntityConverter().getResponse(entity));
   }
 
   @Override

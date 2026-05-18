@@ -11,9 +11,10 @@ import com.inviq.dto.tenset.request.LevelAddRequest;
 import com.inviq.dto.tenset.request.LevelDeleteRequest;
 import com.inviq.dto.tenset.request.LevelUpdateRequest;
 import com.inviq.service.LevelCrudService;
-import com.inviq.serviceImpl.affiliate.usecase.LevelAddUseCase;
-import com.inviq.serviceImpl.affiliate.usecase.LevelDeleteUseCase;
-import com.inviq.serviceImpl.affiliate.usecase.LevelUpdateUseCase;
+import com.inviq.serviceImpl.usecase.LevelAddUseCase;
+import com.inviq.serviceImpl.usecase.LevelDeleteUseCase;
+import com.inviq.serviceImpl.usecase.LevelUpdateUseCase;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,16 +37,19 @@ public class LevelService implements LevelCrudService {
     this.objectMapper = objectMapper;
   }
 
+  @Transactional
   @Override
   public Response create(LevelAddRequest request) {
     return new LevelAddUseCase(this.levelDao, this.auditDao, this.objectMapper).execute(request);
   }
 
+  @Transactional
   @Override
   public Response update(LevelUpdateRequest request) {
     return new LevelUpdateUseCase(this.levelDao, this.auditDao, this.objectMapper).execute(request);
   }
 
+  @Transactional
   @Override
   public Response delete(LevelDeleteRequest request) {
     return new LevelDeleteUseCase(this.levelDao, this.auditDao, this.objectMapper).execute(request);
