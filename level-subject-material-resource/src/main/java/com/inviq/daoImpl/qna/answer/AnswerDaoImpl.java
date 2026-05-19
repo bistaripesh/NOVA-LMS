@@ -118,14 +118,22 @@ public class AnswerDaoImpl implements AnswerDao {
       if (StringUtil.isNotBlankOrNull(filter.getLevelId())) {
         predicates.add(
             cb.equal(
-                root.get("question").get("levelSubjectMaterial").get("level").get("id"),
+                root.get("question")
+                    .get("levelSubjectMaterial")
+                    .get("levelSubject")
+                    .get("level")
+                    .get("id"),
                 filter.getLevelId()));
       }
 
       if (StringUtil.isNotBlankOrNull(filter.getSubjectId())) {
         predicates.add(
             cb.equal(
-                root.get("question").get("levelSubjectMaterial").get("subject").get("id"),
+                root.get("question")
+                    .get("levelSubjectMaterial")
+                    .get("levelSubject")
+                    .get("subject")
+                    .get("id"),
                 filter.getSubjectId()));
       }
 

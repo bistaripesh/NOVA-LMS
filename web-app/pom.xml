@@ -21,85 +21,83 @@
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
         </dependency>
-
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.inviq</groupId>
             <artifactId>multi-tenant</artifactId>
             <version>1.0.0</version>
         </dependency>
-
         <dependency>
             <groupId>com.inviq</groupId>
             <artifactId>user</artifactId>
             <version>1.0.0</version>
         </dependency>
-
-
         <dependency>
             <groupId>com.inviq</groupId>
             <artifactId>level</artifactId>
             <version>1.0.0</version>
         </dependency>
-
-
         <dependency>
             <groupId>com.inviq</groupId>
             <artifactId>subject</artifactId>
             <version>1.0.0</version>
         </dependency>
-
         <dependency>
             <groupId>com.inviq</groupId>
             <artifactId>level-subjects</artifactId>
             <version>1.0.0</version>
         </dependency>
-
         <dependency>
             <groupId>com.inviq</groupId>
             <artifactId>materials</artifactId>
             <version>1.0.0</version>
         </dependency>
-
         <dependency>
             <groupId>com.inviq</groupId>
             <artifactId>level-subjects-material</artifactId>
             <version>1.0.0</version>
         </dependency>
-
         <dependency>
             <groupId>com.inviq</groupId>
             <artifactId>level-subject-material-resource</artifactId>
             <version>1.0.0</version>
         </dependency>
-
         <dependency>
             <groupId>com.inviq</groupId>
             <artifactId>level-subject-chapters</artifactId>
             <version>1.0.0</version>
         </dependency>
-
         <dependency>
             <groupId>com.inviq</groupId>
             <artifactId>affiliate</artifactId>
             <version>1.0.0</version>
         </dependency>
-
         <dependency>
             <groupId>com.inviq</groupId>
             <artifactId>affiliate-referral</artifactId>

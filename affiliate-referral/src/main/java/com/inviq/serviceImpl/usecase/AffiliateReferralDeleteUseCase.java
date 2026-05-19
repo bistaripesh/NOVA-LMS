@@ -45,7 +45,10 @@ public class AffiliateReferralDeleteUseCase
   @Override
   protected AffiliateReferralFilter prepareFilterToFindDuplicateRecord(
       AffiliateReferralUpdateRequest request) {
-    return new AffiliateReferralFilter();
+    return new AffiliateReferralFilter(){{
+      setId(request.getId());
+      setIsReferralCodeActive(false);
+    }};
   }
 
   @Override

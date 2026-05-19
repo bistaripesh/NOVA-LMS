@@ -19,6 +19,11 @@
     <dependencies>
         <dependency>
             <groupId>com.inviq</groupId>
+            <artifactId>audit-dao</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.inviq</groupId>
             <artifactId>level-subjects</artifactId>
             <version>1.0.0</version>
         </dependency>

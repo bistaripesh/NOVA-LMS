@@ -58,7 +58,7 @@ public class SecurityInterceptor extends OncePerRequestFilter {
           .write(
               new ObjectMapper().writeValueAsString(new RestResponseBody(false, "Invalid token")));
       response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-      response.setCharacterEncoding(StandardCharsets.UTF_8);
+      response.setCharacterEncoding(StandardCharsets.UTF_8.name());
       return;
     }
 
@@ -73,7 +73,7 @@ public class SecurityInterceptor extends OncePerRequestFilter {
           .write(
               new ObjectMapper().writeValueAsString(new RestResponseBody(false, "Invalid token")));
       response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-      response.setCharacterEncoding(StandardCharsets.UTF_8);
+      response.setCharacterEncoding(StandardCharsets.UTF_8.name());
       return;
     }
 

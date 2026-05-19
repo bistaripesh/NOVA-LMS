@@ -124,13 +124,16 @@ public class QuestionDaoImpl implements QuestionDao {
 
       if (StringUtil.isNotBlankOrNull(filter.getLevelId())) {
         predicates.add(
-            cb.equal(root.get("levelSubjectMaterial").get("level").get("id"), filter.getLevelId()));
+            cb.equal(
+                root.get("levelSubjectMaterial").get("levelSubject").get("level").get("id"),
+                filter.getLevelId()));
       }
 
       if (StringUtil.isNotBlankOrNull(filter.getSubjectId())) {
         predicates.add(
             cb.equal(
-                root.get("levelSubjectMaterial").get("subject").get("id"), filter.getSubjectId()));
+                root.get("levelSubjectMaterial").get("levelSubject").get("subject").get("id"),
+                filter.getSubjectId()));
       }
 
       if (StringUtil.isNotBlankOrNull(filter.getYear()))
