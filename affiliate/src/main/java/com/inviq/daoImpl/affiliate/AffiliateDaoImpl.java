@@ -93,7 +93,7 @@ public class AffiliateDaoImpl implements AffiliateDao {
             predicates.add(cb.equal(root.get("phoneNumber"), filter.getPhoneNumber()));
           }
 
-          return cb.and(predicates.toArray(new Predicate[0]));
+          return cb.or(predicates.toArray(new Predicate[0]));
         };
     return this.affiliateRepository.findOne(affiliateEntityFindOneSpec);
   }

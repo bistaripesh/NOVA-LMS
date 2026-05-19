@@ -24,7 +24,7 @@ public class CustomAuthEntryPointExceptionHandler implements AuthenticationEntry
       AuthenticationException authException)
       throws IOException, ServletException {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-    response.setCharacterEncoding(StandardCharsets.UTF_8);
+    response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     response
         .getWriter()

@@ -18,6 +18,7 @@ public enum PublicEndpoints {
   SWAGGER_UI(WebConstant.APPLICATION_CONTEXT +"/swagger-ui/**"),
   SWAGGER_API_DOCS(WebConstant.APPLICATION_CONTEXT +"/v3/api-docs/**"),
   SWAGGER_UI_HTML(WebConstant.APPLICATION_CONTEXT +"/swagger-ui.html"),
+  ACTUATOR(WebConstant.APPLICATION_CONTEXT + "/actuator/**"),
   APPLICATION_CONTEXT(WebConstant.APPLICATION_CONTEXT + "/");
 
   private final String endpoint;
