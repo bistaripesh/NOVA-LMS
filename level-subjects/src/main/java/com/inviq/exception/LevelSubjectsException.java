@@ -19,6 +19,7 @@ public class LevelSubjectsException extends AppException {
     LEVEL_SUBJECT_ID_EMPTY("INV-LVS-ID", "Level subject id is empty"),
     LEVEL_ID_EMPTY("INV-LVS-LID", "Level id is empty"),
     SUBJECT_ID_EMPTY("INV-LVS-SID", "Subject id is empty"),
+    PRICE_EMPTY("INV-LVS-PRC", "Price is empty"),
     ;
 
     private final String code;

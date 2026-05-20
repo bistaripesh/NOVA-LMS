@@ -3,8 +3,11 @@ package com.inviq.controller;
 import com.inviq.core.response.RestResponse;
 import com.inviq.core.response.RestResponseBody;
 import com.inviq.dao.filter.LevelSubjectsFilter;
-import com.inviq.dto.tenset.request.LevelSubjectsAddRequest;
-import com.inviq.dto.tenset.request.LevelSubjectsDeleteRequest;
+import com.inviq.dto.request.LevelSubjectPaymentRequest;
+import com.inviq.dto.request.LevelSubjectsAddRequest;
+import com.inviq.dto.request.LevelSubjectsDeleteRequest;
+import com.inviq.dto.request.LevelSubjectsUpdateRequest;
+import com.inviq.service.LevelSubjectPaymentService;
 import com.inviq.service.LevelSubjectsCrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +22,12 @@ import org.springframework.web.bind.annotation.*;
 public class LevelSubjectsController {
 
   private final LevelSubjectsCrudService levelSubjectsCrudService;
+  private final LevelSubjectPaymentService levelSubjectPaymentService;
 
   @Autowired
-  public LevelSubjectsController(LevelSubjectsCrudService levelSubjectsCrudService) {
+  public LevelSubjectsController(LevelSubjectsCrudService levelSubjectsCrudService,LevelSubjectPaymentService levelSubjectPaymentService) {
     this.levelSubjectsCrudService = levelSubjectsCrudService;
+    this.levelSubjectPaymentService = levelSubjectPaymentService;
   }
 
   @PreAuthorize("hasAuthority('ADMIN')")
@@ -30,6 +35,13 @@ public class LevelSubjectsController {
   public ResponseEntity<RestResponseBody> createLevelSubjects(
       @RequestBody LevelSubjectsAddRequest levelSubjectsAddRequest) {
     return RestResponse.ok(this.levelSubjectsCrudService.create(levelSubjectsAddRequest));
+  }
+
+  @PreAuthorize("hasAuthority('ADMIN')")
+  @PutMapping
+  public ResponseEntity<RestResponseBody> updateLevelSubjects(
+      @RequestBody LevelSubjectsUpdateRequest levelSubjectsUpdateRequest) {
+    return RestResponse.ok(this.levelSubjectsCrudService.update(levelSubjectsUpdateRequest));
   }
 
   @PreAuthorize("hasAuthority('ADMIN')")
@@ -51,5 +63,12 @@ public class LevelSubjectsController {
   public ResponseEntity<RestResponseBody> getLevelSubjectsWithPagination(
       @ModelAttribute LevelSubjectsFilter levelSubjectsFilter) {
     return RestResponse.ok(this.levelSubjectsCrudService.findWithPagination(levelSubjectsFilter));
+  }
+
+  @PreAuthorize("hasAuthority('USER')")
+  @PostMapping("/initiate-payment")
+  public ResponseEntity<RestResponseBody> initiatePaymentForLevelSubjects(
+      @RequestBody LevelSubjectPaymentRequest levelSubjectPaymentRequest) {
+    return RestResponse.ok(this.levelSubjectPaymentService.initiatePayment(levelSubjectPaymentRequest));
   }
 }

@@ -1,8 +1,9 @@
 package com.inviq.core.service;
 
 import com.inviq.core.constants.FileExtension;
-import com.inviq.core.exception.DynamicAppException;
+import com.inviq.core.exception.AppException;
 import com.inviq.core.util.FileUtil;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,7 +17,7 @@ public class FileService {
 
       return FileUtil.writeFileTemporarily(file, fileExtension);
     } catch (Exception ex) {
-      throw new DynamicAppException(ex.getMessage());
+      throw new AppException(  String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), ex.getMessage());
     }
   }
 }

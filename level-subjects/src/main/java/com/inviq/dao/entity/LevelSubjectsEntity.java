@@ -8,6 +8,8 @@ import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.math.BigDecimal;
+
 /**
  * @author ripesh created on 05/05/2026
  */
@@ -24,4 +26,6 @@ public class LevelSubjectsEntity extends BaseEntity<LevelSubjectsEntity> {
 
   @ManyToOne(fetch = FetchType.LAZY)
   private SubjectEntity subject;
+
+  private BigDecimal price;
 }

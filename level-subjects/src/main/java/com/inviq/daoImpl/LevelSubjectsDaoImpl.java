@@ -90,6 +90,11 @@ public class LevelSubjectsDaoImpl implements LevelSubjectsDao {
           if (StringUtil.isNotBlankOrNull(filter.getLevelId())) {
             predicates.add(criteriaBuilder.equal(root.get("level").get("id"), filter.getLevelId()));
           }
+
+          if(filter.getPrice()!=null){
+            predicates.add(criteriaBuilder.equal(root.get("price"), filter.getPrice()));
+          }
+
           if (StringUtil.isNotBlankOrNull(filter.getSubjectId())) {
             predicates.add(
                 criteriaBuilder.equal(root.get("subject").get("id"), filter.getSubjectId()));

@@ -2,7 +2,7 @@ package com.inviq.serviceImpl.tenset.usecase;
 
 import com.inviq.constant.TenSetConstant;
 import com.inviq.core.entity.BaseDao;
-import com.inviq.core.exception.DynamicAppException;
+import com.inviq.core.exception.AppException;
 import com.inviq.core.service.usecase.AbstractGetOneUseCase;
 import com.inviq.dao.tenset.converter.TenSetEntityConverter;
 import com.inviq.dao.tenset.entity.TenSetEntity;
@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
+import org.springframework.http.HttpStatus;
 
 public class TenSetGetOneUseCase
     extends AbstractGetOneUseCase<TenSetEntity, TenSetDetailSearchResponse, TenSetFilter> {
@@ -49,7 +50,7 @@ public class TenSetGetOneUseCase
 
       } catch (IOException e) {
 
-        throw new DynamicAppException(e.getMessage());
+        throw new AppException(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR), e.getMessage());
       }
 
       byte[] finalPdfBytes = pdfBytes;
@@ -77,7 +78,7 @@ public class TenSetGetOneUseCase
 
     } catch (Exception ex) {
 
-      throw new DynamicAppException(ex.getMessage());
+      throw new AppException(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR), ex.getMessage());
     }
 
     return response;

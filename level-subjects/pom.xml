@@ -26,6 +26,23 @@
 
         <dependency>
             <groupId>com.inviq</groupId>
+            <artifactId>payment-gateway</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.inviq</groupId>
+            <artifactId>affiliate-referral</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.inviq</groupId>
+            <artifactId>cache-service</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.inviq</groupId>
             <artifactId>level</artifactId>
             <version>1.0.0</version>
         </dependency>

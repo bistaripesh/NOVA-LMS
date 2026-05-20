@@ -1,14 +1,14 @@
 package com.inviq;
 
+import com.inviq.constants.FonePayEnvConstants;
 import com.inviq.constants.FonePayPaymentMode;
 import com.inviq.constants.FonePayQRType;
+import com.inviq.core.util.SystemUtil;
 import com.inviq.dto.fonepay.request.FonePayBankListRequest;
 import com.inviq.dto.fonepay.request.FonePayIntentQRRequest;
 import com.inviq.dto.fonepay.request.FonePayLoginRequest;
-import com.inviq.dto.fonepay.response.BankDetails;
-import com.inviq.dto.fonepay.response.FonePayBankListResponse;
-import com.inviq.dto.fonepay.response.FonePayIntentQRResponse;
-import com.inviq.dto.fonepay.response.FonePayLoginResponse;
+import com.inviq.dto.fonepay.request.FonePayPaymentStatusRequest;
+import com.inviq.dto.fonepay.response.*;
 import com.inviq.serviceImpl.fonepay.FonePayServiceImpl;
 import java.math.BigDecimal;
 
@@ -21,7 +21,10 @@ public class Main {
   public static void main(String[] args) throws Exception {
     FonePayServiceImpl fonePayService = new FonePayServiceImpl();
     FonePayLoginResponse loginResp =
-        fonePayService.oAuthLogin(new FonePayLoginRequest("esewa", "password"));
+        fonePayService.oAuthLogin(
+            new FonePayLoginRequest(
+                SystemUtil.getEnv(FonePayEnvConstants.FONE_PAY_USERNAME),
+                SystemUtil.getEnv(FonePayEnvConstants.FONE_PAY_PASSWORD)));
     System.out.println(loginResp.getAccessToken());
     FonePayBankListRequest fonePayBankListRequest = new FonePayBankListRequest();
     fonePayBankListRequest.setBearerToken(loginResp.getAccessToken());
@@ -34,19 +37,31 @@ public class Main {
     fonePayIntentQRRequest.setBearerToken(loginResp.getAccessToken());
     fonePayIntentQRRequest.setAmount(BigDecimal.valueOf(1.00));
     fonePayIntentQRRequest.setBillId("BILL-" + System.currentTimeMillis());
-    fonePayIntentQRRequest.setTerminalId("4271420000001762");
+    fonePayIntentQRRequest.setTerminalId("2222090019524882");
     fonePayIntentQRRequest.setPaymentMode(FonePayPaymentMode.QR.getCode());
     fonePayIntentQRRequest.setReferenceLabel(uniqueRef);
     fonePayIntentQRRequest.setFonePayQrType(FonePayQRType.INTENT_QR.getCode());
 
+    System.out.println("----UNIQUE---REF");
+    System.out.println(uniqueRef);
+
+
+    FonePayPaymentStatusRequest req= new FonePayPaymentStatusRequest();
+    req.setBearerToken(loginResp.getAccessToken());
+    req.setTerminalId("2222090019524882");
+    req.setReferenceLabel("REF1779290578333");
+
+    FonePayPaymentStatusResponse resp = fonePayService.getPaymentStatus(req);
+    System.out.println(resp.getPaymentStatus());
+
     for (BankDetails response : fonePayBankListResponse.getBankDetails()) {
-      System.out.println(response.getBankName());
-      System.out.println(response.getBankCode());
-      System.out.println(response.getBankIcon());
+    //  System.out.println(response.getBankName());
+   //   System.out.println(response.getBankCode());
+     // System.out.println(response.getBankIcon());
     }
 
-    FonePayIntentQRResponse qrResponse = fonePayService.getIntentQR(fonePayIntentQRRequest);
+  //  FonePayIntentQRResponse qrResponse = fonePayService.getIntentQR(fonePayIntentQRRequest);
 
-    System.out.println(qrResponse.getQrString());
+ //  System.out.println(qrResponse.getQrString());
   }
 }

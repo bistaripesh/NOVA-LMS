@@ -3,15 +3,17 @@ package com.inviq.serviceImpl.fonepay;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inviq.constants.FonePayEndpoints;
 import com.inviq.constants.FonePayEnvConstants;
-import com.inviq.core.exception.DynamicAppException;
+import com.inviq.core.exception.AppException;
 import com.inviq.core.util.StringUtil;
 import com.inviq.core.util.SystemUtil;
 import com.inviq.dto.fonepay.request.FonePayBankListRequest;
 import com.inviq.dto.fonepay.request.FonePayIntentQRRequest;
 import com.inviq.dto.fonepay.request.FonePayLoginRequest;
+import com.inviq.dto.fonepay.request.FonePayPaymentStatusRequest;
 import com.inviq.dto.fonepay.response.FonePayBankListResponse;
 import com.inviq.dto.fonepay.response.FonePayIntentQRResponse;
 import com.inviq.dto.fonepay.response.FonePayLoginResponse;
+import com.inviq.dto.fonepay.response.FonePayPaymentStatusResponse;
 import com.inviq.service.fonepay.FonePayService;
 import com.inviq.util.FonePaySignatureUtil;
 import java.net.URI;
@@ -21,10 +23,12 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Base64;
+import org.springframework.stereotype.Service;
 
 /**
  * @author ripesh created on 14/05/2026
  */
+@Service
 public class FonePayServiceImpl implements FonePayService {
 
   @Override
@@ -56,11 +60,13 @@ public class FonePayServiceImpl implements FonePayService {
 
     return switch (response.statusCode()) {
       case 200 -> new ObjectMapper().readValue(response.body(), FonePayLoginResponse.class);
-      case 401 -> throw new DynamicAppException("Invalid Credentials");
-      case 403 -> throw new DynamicAppException("Access Denied");
-      case 404 -> throw new DynamicAppException("Not Found");
-      case 500 -> throw new DynamicAppException("Internal Server Error");
-      default -> throw new DynamicAppException(response.body());
+      case 401 ->
+          throw new AppException(String.valueOf(response.statusCode()), "Invalid Credentials");
+      case 403 -> throw new AppException(String.valueOf(response.statusCode()), "Access Denied");
+      case 404 -> throw new AppException(String.valueOf(response.statusCode()), "Not Found");
+      case 500 ->
+          throw new AppException(String.valueOf(response.statusCode()), "Internal Server Error");
+      default -> throw new AppException(String.valueOf(response.statusCode()), response.body());
     };
   }
 
@@ -99,11 +105,13 @@ public class FonePayServiceImpl implements FonePayService {
 
     return switch (response.statusCode()) {
       case 200 -> new ObjectMapper().readValue(response.body(), FonePayBankListResponse.class);
-      case 401 -> throw new DynamicAppException("Invalid Credentials");
-      case 403 -> throw new DynamicAppException("Access Denied");
-      case 404 -> throw new DynamicAppException("Not Found");
-      case 500 -> throw new DynamicAppException("Internal Server Error");
-      default -> throw new DynamicAppException(response.body());
+      case 401 ->
+          throw new AppException(String.valueOf(response.statusCode()), "Invalid Credentials");
+      case 403 -> throw new AppException(String.valueOf(response.statusCode()), "Access Denied");
+      case 404 -> throw new AppException(String.valueOf(response.statusCode()), "Not Found");
+      case 500 ->
+          throw new AppException(String.valueOf(response.statusCode()), "Internal Server Error");
+      default -> throw new AppException(String.valueOf(response.statusCode()), response.body());
     };
   }
 
@@ -135,11 +143,49 @@ public class FonePayServiceImpl implements FonePayService {
         httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
     return switch (response.statusCode()) {
       case 202 -> new ObjectMapper().readValue(response.body(), FonePayIntentQRResponse.class);
-      case 401 -> throw new DynamicAppException("Invalid Credentials");
-      case 403 -> throw new DynamicAppException("Access Denied");
-      case 404 -> throw new DynamicAppException("Not Found");
-      case 500 -> throw new DynamicAppException("Internal Server Error");
-      default -> throw new DynamicAppException(response.body());
+      case 401 ->
+          throw new AppException(String.valueOf(response.statusCode()), "Invalid Credentials");
+      case 403 -> throw new AppException(String.valueOf(response.statusCode()), "Access Denied");
+      case 404 -> throw new AppException(String.valueOf(response.statusCode()), "Not Found");
+      case 500 ->
+          throw new AppException(String.valueOf(response.statusCode()), "Internal Server Error");
+      default -> throw new AppException(String.valueOf(response.statusCode()), response.body());
+    };
+  }
+
+  @Override
+  public FonePayPaymentStatusResponse getPaymentStatus(FonePayPaymentStatusRequest request)
+      throws Exception {
+    String jsonBody = new ObjectMapper().writeValueAsString(request).replace(" ", "");
+    String signature = FonePaySignatureUtil.sign(jsonBody);
+    HttpRequest req =
+        HttpRequest.newBuilder()
+            .uri(
+                URI.create(
+                    SystemUtil.getEnv(FonePayEnvConstants.FONE_PAY_BASE_URL)
+                        + FonePayEndpoints.PAYMENT_STATUS))
+            .header("Content-Type", "application/json")
+            .header(
+                "Authorization",
+                request.getBearerToken().startsWith("Bearer ")
+                    ? request.getBearerToken()
+                    : "Bearer " + request.getBearerToken())
+            .header("signature", signature)
+            .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+            .build();
+
+    HttpResponse<String> response =
+        HttpClient.newHttpClient().send(req, HttpResponse.BodyHandlers.ofString());
+
+    return switch (response.statusCode()) {
+      case 200 -> new ObjectMapper().readValue(response.body(), FonePayPaymentStatusResponse.class);
+      case 401 ->
+          throw new AppException(String.valueOf(response.statusCode()), "Invalid Credentials");
+      case 403 -> throw new AppException(String.valueOf(response.statusCode()), "Access Denied");
+      case 404 -> throw new AppException(String.valueOf(response.statusCode()), "Not Found");
+      case 500 ->
+          throw new AppException(String.valueOf(response.statusCode()), "Internal Server Error");
+      default -> throw new AppException(String.valueOf(response.statusCode()), response.body());
     };
   }
 }

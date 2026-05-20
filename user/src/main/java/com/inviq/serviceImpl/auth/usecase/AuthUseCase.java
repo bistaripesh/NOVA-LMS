@@ -2,7 +2,6 @@ package com.inviq.serviceImpl.auth.usecase;
 
 import com.inviq.core.constants.NovaLmsAppSecurityEnvConstants;
 import com.inviq.core.exception.AppException;
-import com.inviq.core.exception.DynamicAppException;
 import com.inviq.core.security.token.JWTTokenInfo;
 import com.inviq.core.security.token.JWTTokenUtils;
 import com.inviq.core.util.StringUtil;
@@ -81,7 +80,7 @@ public class AuthUseCase {
           JWTTokenUtils.getRefreshToken(
               jwtTokenInfo, true, NovaLmsAppSecurityEnvConstants.REFRESH_TOKEN_SECRET_KEY);
     } catch (Exception ex) {
-      throw new DynamicAppException(
+      throw new AppException(
           HttpStatus.INTERNAL_SERVER_ERROR.toString(), "Error generating refresh token");
     }
     return refreshToken;

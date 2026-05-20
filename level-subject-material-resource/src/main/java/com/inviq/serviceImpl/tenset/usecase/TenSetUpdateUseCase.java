@@ -6,7 +6,7 @@ import com.inviq.constant.TenSetConstant;
 import com.inviq.core.constants.FileExtension;
 import com.inviq.core.entity.BaseDao;
 import com.inviq.core.entity.Module;
-import com.inviq.core.exception.DynamicAppException;
+import com.inviq.core.exception.AppException;
 import com.inviq.core.service.usecase.AbstractUpdateUseCase;
 import com.inviq.core.util.FileUtil;
 import com.inviq.core.util.StringUtil;
@@ -15,6 +15,8 @@ import com.inviq.dao.tenset.entity.TenSetEntity;
 import com.inviq.dao.tenset.filter.TenSetFilter;
 import com.inviq.dto.tenset.request.TenSetUpdateRequest;
 import com.inviq.dto.tenset.response.TenSetUpdateResponse;
+import org.springframework.http.HttpStatus;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -48,7 +50,7 @@ public class TenSetUpdateUseCase
                 StringUtil.getUUID().concat("_").concat(request.getTitle()),
                 FileExtension.PDF));
       } catch (Exception ex) {
-        throw new DynamicAppException(ex.getMessage());
+        throw new AppException(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR),ex.getMessage());
       }
     }
   }

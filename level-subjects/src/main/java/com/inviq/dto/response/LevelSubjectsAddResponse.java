@@ -1,4 +1,4 @@
-package com.inviq.dto.tenset.response;
+package com.inviq.dto.response;
 
 import com.inviq.core.dto.response.BaseResponse;
 

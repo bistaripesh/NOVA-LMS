@@ -1,4 +1,4 @@
-package com.inviq.dto.tenset.request;
+package com.inviq.dto.request;
 
 import com.inviq.core.dto.request.crud.delete.BaseDeleteRequest;
 import com.inviq.core.exception.AppException;

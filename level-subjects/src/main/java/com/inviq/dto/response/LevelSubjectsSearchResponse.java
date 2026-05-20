@@ -1,8 +1,10 @@
-package com.inviq.dto.tenset.response;
+package com.inviq.dto.response;
 
 import com.inviq.core.dto.response.BaseResponse;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.math.BigDecimal;
 
 /**
  * @author ripesh created on 05/05/2026
@@ -14,4 +16,5 @@ public class LevelSubjectsSearchResponse extends BaseResponse {
   private String levelName;
   private String subjectId;
   private String subjectName;
+  private BigDecimal price;
 }

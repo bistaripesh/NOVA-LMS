@@ -4,6 +4,8 @@ import com.inviq.core.dto.filter.BaseFilterRequest;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 /**
  * @author ripesh created on 05/05/2026
  */
@@ -13,4 +15,5 @@ public class LevelSubjectsFilter extends BaseFilterRequest {
   private String levelId;
   private String subjectId;
   private String subjectName;
+  private BigDecimal price;
 }

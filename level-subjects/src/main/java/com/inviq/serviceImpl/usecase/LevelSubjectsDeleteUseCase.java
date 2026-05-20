@@ -7,8 +7,8 @@ import com.inviq.core.entity.Module;
 import com.inviq.core.service.usecase.AbstractDeleteUseCase;
 import com.inviq.dao.entity.LevelSubjectsEntity;
 import com.inviq.dao.filter.LevelSubjectsFilter;
-import com.inviq.dto.tenset.request.LevelSubjectsDeleteRequest;
-import com.inviq.dto.tenset.response.LevelSubjectsDeleteResponse;
+import com.inviq.dto.request.LevelSubjectsDeleteRequest;
+import com.inviq.dto.response.LevelSubjectsDeleteResponse;
 
 /**
  * @author ripesh created on 05/05/2026

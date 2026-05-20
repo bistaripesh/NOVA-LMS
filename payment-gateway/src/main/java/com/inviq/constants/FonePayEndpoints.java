@@ -7,4 +7,5 @@ public class FonePayEndpoints {
   public static final String LOGIN = "v2/login";
   public static final String GET_BANK_LIST = "v2/banks/list";
   public static final String INTENT_QR = "v2/generate-intent-qr";
+  public static final String PAYMENT_STATUS = "/v2/thirdPartyDynamicQrGetStatus";
 }

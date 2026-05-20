@@ -1,9 +1,10 @@
-package com.inviq.dto.tenset.request;
+package com.inviq.dto.request;
 
 import com.inviq.core.dto.request.crud.add.BaseAddRequest;
 import com.inviq.core.exception.AppException;
 import com.inviq.core.util.StringUtil;
 import com.inviq.exception.LevelSubjectsException;
+import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,7 @@ public class LevelSubjectsAddRequest extends BaseAddRequest {
 
   private String levelId;
   private String subjectId;
+  private BigDecimal price;
 
   @Override
   public void validateRequest() {
@@ -23,5 +25,7 @@ public class LevelSubjectsAddRequest extends BaseAddRequest {
       throw new AppException(LevelSubjectsException.LevelSubjectsError.LEVEL_ID_EMPTY);
     if (StringUtil.isBlankOrNull(this.subjectId))
       throw new AppException(LevelSubjectsException.LevelSubjectsError.SUBJECT_ID_EMPTY);
+    if (this.price == null)
+      throw new AppException(LevelSubjectsException.LevelSubjectsError.PRICE_EMPTY);
   }
 }

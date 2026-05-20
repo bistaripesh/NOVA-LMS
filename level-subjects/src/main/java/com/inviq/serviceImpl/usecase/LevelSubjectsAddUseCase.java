@@ -9,8 +9,8 @@ import com.inviq.dao.entity.LevelEntity;
 import com.inviq.dao.entity.LevelSubjectsEntity;
 import com.inviq.dao.entity.SubjectEntity;
 import com.inviq.dao.filter.LevelSubjectsFilter;
-import com.inviq.dto.tenset.request.LevelSubjectsAddRequest;
-import com.inviq.dto.tenset.response.LevelSubjectsAddResponse;
+import com.inviq.dto.request.LevelSubjectsAddRequest;
+import com.inviq.dto.response.LevelSubjectsAddResponse;
 
 /**
  * @author ripesh created on 05/05/2026

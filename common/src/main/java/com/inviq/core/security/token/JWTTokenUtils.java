@@ -2,7 +2,7 @@ package com.inviq.core.security.token;
 
 import com.inviq.core.constants.NovaLmsAppSecurityEnvConstants;
 import com.inviq.core.constants.NovaLmsSecurityConstants;
-import com.inviq.core.exception.DynamicAppException;
+import com.inviq.core.exception.AppException;
 import com.inviq.core.security.encryption.SecurityUtil;
 import com.inviq.core.util.SystemUtil;
 import io.jsonwebtoken.Claims;
@@ -93,7 +93,8 @@ public class JWTTokenUtils {
 
     } catch (Exception ex) {
       LOGGER.severe("ERROR: " + ex.getMessage());
-      throw new DynamicAppException(HttpStatus.INTERNAL_SERVER_ERROR.toString(), ex.getMessage());
+      throw new AppException(
+          String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), ex.getMessage());
     }
   }
 }

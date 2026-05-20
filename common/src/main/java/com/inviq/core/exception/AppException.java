@@ -8,16 +8,15 @@ import lombok.Getter;
 @Getter
 public class AppException extends RuntimeException {
 
-  private ExceptionType exceptionType;
-  private String code;
-  private String message;
+  private final String code;
 
   public AppException(ExceptionType exceptionType) {
     super(exceptionType.getMessage());
-    this.exceptionType = exceptionType;
+    this.code = exceptionType.getCode();
   }
 
-  public AppException(String message) {
+  public AppException(String code, String message) {
     super(message);
+    this.code = code;
   }
 }

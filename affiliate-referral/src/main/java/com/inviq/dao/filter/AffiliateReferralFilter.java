@@ -12,4 +12,5 @@ import lombok.Setter;
 public class AffiliateReferralFilter extends BaseFilterRequest {
   private String affiliateId;
   private Boolean isReferralCodeActive;
+  private String referralCode;
 }

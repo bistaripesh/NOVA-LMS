@@ -48,6 +48,6 @@ public class CacheServiceImpl implements CacheService {
 
   @Override
   public boolean isCacheMiss(String key) {
-    return this.redisClient.exists(key);
+    return !this.redisClient.exists(key);
   }
 }

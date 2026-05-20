@@ -1,0 +1,127 @@
+package com.inviq.serviceImpl.usecase;
+
+import com.inviq.constants.FonePayConstants;
+import com.inviq.constants.FonePayEnvConstants;
+import com.inviq.constants.FonePayPaymentMode;
+import com.inviq.constants.FonePayQRType;
+import com.inviq.core.context.UserPrincipal;
+import com.inviq.core.entity.exception.DatabaseExceptionManager;
+import com.inviq.core.exception.AppException;
+import com.inviq.core.util.StringUtil;
+import com.inviq.core.util.SystemUtil;
+import com.inviq.dao.AffiliateReferralDao;
+import com.inviq.dao.LevelSubjectsDao;
+import com.inviq.dao.entity.AffiliateReferralEntity;
+import com.inviq.dao.entity.LevelSubjectsEntity;
+import com.inviq.dao.filter.AffiliateReferralFilter;
+import com.inviq.dao.filter.LevelSubjectsFilter;
+import com.inviq.dto.fonepay.request.FonePayIntentQRRequest;
+import com.inviq.dto.fonepay.request.FonePayLoginRequest;
+import com.inviq.dto.fonepay.response.FonePayLoginResponse;
+import com.inviq.dto.request.LevelSubjectPaymentRequest;
+import com.inviq.exception.CacheExceptionManager;
+import com.inviq.exception.FonePayExceptionManager;
+import com.inviq.service.fonepay.FonePayService;
+import com.inviq.serviceImpl.CacheService;
+import com.inviq.util.ReferralCodeUtil;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+/**
+ * @author ripesh created on 19/05/2026
+ */
+public class LevelSubjectsInitiatePaymentUseCase {
+
+  private final LevelSubjectsDao levelSubjectsDao;
+  private final AffiliateReferralDao affiliateReferralDao;
+  private final FonePayService fonePayService;
+  private final CacheService cacheService;
+
+  public LevelSubjectsInitiatePaymentUseCase(
+      LevelSubjectsDao levelSubjectsDao,
+      AffiliateReferralDao affiliateReferralDao,
+      FonePayService fonePayService,
+      CacheService cacheService) {
+    this.levelSubjectsDao = levelSubjectsDao;
+    this.affiliateReferralDao = affiliateReferralDao;
+    this.fonePayService = fonePayService;
+    this.cacheService = cacheService;
+  }
+
+  public Object execute(LevelSubjectPaymentRequest request) {
+    request.validateRequest();
+    if (StringUtil.isNotBlankOrNull(request.getAffiliateReferralCode())) {
+      AffiliateReferralFilter affiliateReferralFilter = new AffiliateReferralFilter();
+      affiliateReferralFilter.setIsReferralCodeActive(true);
+      affiliateReferralFilter.setReferralCode(request.getAffiliateReferralCode());
+
+      AffiliateReferralEntity affiliateReferralEntity =
+          affiliateReferralDao
+              .findOne(affiliateReferralFilter)
+              .orElseThrow(
+                  () -> new AppException(DatabaseExceptionManager.DatabaseError.RECORD_NOT_FOUND));
+      // TODO add affiliate referral logic
+      System.out.println("x--DONE--");
+    }
+    LevelSubjectsEntity levelSubject = fetchLevelSubject(request.getLevelSubjectId());
+    this.ensureFonePayAuthenticated();
+    FonePayIntentQRRequest qrRequest = this.buildQRRequest(levelSubject);
+    return requestIntentQR(qrRequest);
+  }
+
+  private LevelSubjectsEntity fetchLevelSubject(String levelSubjectId) {
+    LevelSubjectsFilter filter = new LevelSubjectsFilter();
+    filter.setId(levelSubjectId);
+    return levelSubjectsDao
+        .findOne(filter)
+        .orElseThrow(
+            () -> new AppException(DatabaseExceptionManager.DatabaseError.RECORD_NOT_FOUND));
+  }
+
+  private void ensureFonePayAuthenticated() {
+    if (!cacheService.isCacheMiss(FonePayConstants.FONE_PAY_BEARER_TOKEN)) return;
+    try {
+      FonePayLoginResponse loginResp =
+          fonePayService.oAuthLogin(
+              new FonePayLoginRequest(
+                  SystemUtil.getEnv(FonePayEnvConstants.FONE_PAY_USERNAME),
+                  SystemUtil.getEnv(FonePayEnvConstants.FONE_PAY_PASSWORD)));
+      if (cacheService.addStringData(
+              FonePayConstants.FONE_PAY_BEARER_TOKEN,
+              loginResp.getAccessToken(),
+              loginResp.getExpiresIn())
+          <= 0) throw new AppException(CacheExceptionManager.CacheError.FAILED_TO_ADD_TO_CACHE);
+    } catch (Exception e) {
+      throw new AppException(FonePayExceptionManager.FonePayError.FONEPAY_LOGIN_FAILED);
+    }
+  }
+
+  private FonePayIntentQRRequest buildQRRequest(LevelSubjectsEntity levelSubject) {
+    String billId =
+        "BILL-" + levelSubject.getId() + getCurrentUserId() + System.currentTimeMillis();
+    String refLabel = "REF" + System.currentTimeMillis();
+
+    FonePayIntentQRRequest qrRequest = new FonePayIntentQRRequest();
+    qrRequest.setBearerToken(cacheService.getStringData(FonePayConstants.FONE_PAY_BEARER_TOKEN));
+    qrRequest.setAmount(levelSubject.getPrice());
+    qrRequest.setBillId(billId);
+    qrRequest.setReferenceLabel(refLabel);
+    qrRequest.setPaymentMode(FonePayPaymentMode.QR.getCode());
+    qrRequest.setFonePayQrType(FonePayQRType.INTENT_QR.getCode());
+    // TODO remove this hard coded terminal id
+    qrRequest.setTerminalId(SystemUtil.getEnv(FonePayEnvConstants.FONE_PAY_TERMINAL_ID));
+    return qrRequest;
+  }
+
+  private Object requestIntentQR(FonePayIntentQRRequest qrRequest) {
+    try {
+      return fonePayService.getIntentQR(qrRequest);
+    } catch (Exception e) {
+      throw new AppException(FonePayExceptionManager.FonePayError.ERROR_REQUESTING_FONEPAY_QR);
+    }
+  }
+
+  private String getCurrentUserId() {
+    return ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+        .getUserId();
+  }
+}
