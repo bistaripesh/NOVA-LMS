@@ -1,6 +1,5 @@
 package com.inviq.controller;
 
-import com.inviq.core.access.LevelSubjectAccessService;
 import com.inviq.core.constants.FileExtension;
 import com.inviq.core.context.UserPrincipal;
 import com.inviq.core.response.RestResponse;
@@ -10,6 +9,7 @@ import com.inviq.dao.tenset.filter.TenSetFilter;
 import com.inviq.dto.tenset.request.TenSetAddRequest;
 import com.inviq.dto.tenset.request.TenSetDeleteRequest;
 import com.inviq.dto.tenset.request.TenSetUpdateRequest;
+import com.inviq.service.LevelSubjectAccessService;
 import com.inviq.service.tenset.TenSetCrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

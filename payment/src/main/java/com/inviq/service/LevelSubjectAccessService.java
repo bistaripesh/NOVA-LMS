@@ -1,4 +1,4 @@
-package com.inviq.core.access;
+package com.inviq.service;
 
 import com.inviq.core.user.UserType;
 

@@ -23,6 +23,11 @@
             <artifactId>level-subjects</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.inviq</groupId>
+            <artifactId>payment</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
 </project>

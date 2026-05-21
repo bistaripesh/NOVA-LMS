@@ -1,12 +1,12 @@
 package com.inviq.controller;
 
-import com.inviq.core.access.LevelSubjectAccessService;
 import com.inviq.core.context.UserPrincipal;
 import com.inviq.core.response.RestResponse;
 import com.inviq.core.response.RestResponseBody;
 import com.inviq.dao.filter.LevelSubjectMaterialFilter;
 import com.inviq.dto.tenset.request.LevelSubjectMaterialAddRequest;
 import com.inviq.dto.tenset.request.LevelSubjectMaterialDeleteRequest;
+import com.inviq.service.LevelSubjectAccessService;
 import com.inviq.serviceImpl.LevelSubjectMaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

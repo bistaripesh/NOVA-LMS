@@ -40,7 +40,6 @@ public class LevelSubjectPaymentController {
     return RestResponse.ok(this.levelSubjectPaymentService.verifyPayment(paymentVerificationRequest));
   }
 
-  @PreAuthorize("hasAuthority('USER')")
   @GetMapping("/my-purchases")
   public ResponseEntity<RestResponseBody> getMyPurchases() {
     UserPrincipal principal =

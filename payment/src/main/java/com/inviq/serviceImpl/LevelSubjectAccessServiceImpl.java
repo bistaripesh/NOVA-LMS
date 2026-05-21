@@ -1,6 +1,6 @@
-package com.inviq.service;
+package com.inviq.serviceImpl;
 
-import com.inviq.core.access.LevelSubjectAccessService;
+import com.inviq.service.LevelSubjectAccessService;
 import com.inviq.core.util.StringUtil;
 import com.inviq.core.user.UserType;
 import com.inviq.dao.PaymentDao;

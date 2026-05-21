@@ -1,6 +1,5 @@
 package com.inviq.controller;
 
-import com.inviq.core.access.LevelSubjectAccessService;
 import com.inviq.core.context.UserPrincipal;
 import com.inviq.core.response.RestResponse;
 import com.inviq.core.response.RestResponseBody;
@@ -8,6 +7,7 @@ import com.inviq.dao.affiliate.filter.LevelSubjectChapterFilter;
 import com.inviq.dto.request.LevelSubjectChapterAddRequest;
 import com.inviq.dto.request.LevelSubjectChapterDeleteRequest;
 import com.inviq.dto.request.LevelSubjectChapterUpdateRequest;
+import com.inviq.service.LevelSubjectAccessService;
 import com.inviq.service.LevelSubjectChapterCrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
