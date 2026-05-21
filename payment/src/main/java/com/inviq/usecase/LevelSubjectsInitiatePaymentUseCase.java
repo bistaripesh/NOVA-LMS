@@ -1,4 +1,4 @@
-package com.inviq.serviceImpl.usecase;
+package com.inviq.usecase;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inviq.audit.dao.AuditDao;
@@ -27,7 +27,6 @@ import com.inviq.exception.CacheExceptionManager;
 import com.inviq.exception.FonePayExceptionManager;
 import com.inviq.service.fonepay.FonePayService;
 import com.inviq.serviceImpl.CacheService;
-import com.inviq.usecase.PaymentAddUseCase;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**

@@ -5,4 +5,5 @@ package com.inviq.constants;
  */
 public class FonePayConstants {
   public static final String FONE_PAY_BEARER_TOKEN = "FONE_PAY_BEARER_TOKEN";
+  public static final String FONE_PAY_PAYMENT_STATUS="SUCCESS";
 }
