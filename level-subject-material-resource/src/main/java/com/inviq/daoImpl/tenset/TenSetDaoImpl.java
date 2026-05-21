@@ -111,6 +111,11 @@ public class TenSetDaoImpl implements TenSetDao {
     return this.tenSetRepository.findById(id);
   }
 
+  @Override
+  public Optional<String> findLevelSubjectIdById(String id) {
+    return this.tenSetRepository.findLevelSubjectIdById(id);
+  }
+
   private Specification<TenSetEntity> getTenSetSpecification(TenSetFilter filter) {
     return (root, query, cb) -> {
       List<Predicate> predicates = new ArrayList<>();

@@ -5,6 +5,7 @@ import com.inviq.core.context.UserPrincipal;
 import com.inviq.core.response.RestResponse;
 import com.inviq.core.response.RestResponseBody;
 import com.inviq.core.service.FileService;
+import com.inviq.dao.tenset.TenSetDao;
 import com.inviq.dao.tenset.filter.TenSetFilter;
 import com.inviq.dto.tenset.request.TenSetAddRequest;
 import com.inviq.dto.tenset.request.TenSetDeleteRequest;
@@ -28,15 +29,18 @@ public class TenSetController {
 
   private final FileService fileService;
   private final TenSetCrudService tenSetCrudService;
+  private final TenSetDao tenSetDao;
   private final LevelSubjectAccessService levelSubjectAccessService;
 
   @Autowired
   public TenSetController(
       TenSetCrudService tenSetCrudService,
       FileService fileService,
+      TenSetDao tenSetDao,
       LevelSubjectAccessService levelSubjectAccessService) {
     this.tenSetCrudService = tenSetCrudService;
     this.fileService = fileService;
+    this.tenSetDao = tenSetDao;
     this.levelSubjectAccessService = levelSubjectAccessService;
   }
 
@@ -80,10 +84,9 @@ public class TenSetController {
   @PreAuthorize("hasAnyAuthority('ADMIN','USER','WRITER')")
   @GetMapping("{id}/render/{pageNum}")
   public ResponseEntity<RestResponseBody> getPdf(
-      @PathVariable("id") String id,
-      @PathVariable("pageNum") int pageNum,
-      @RequestParam(value = "levelSubjectId", required = false) String levelSubjectId) {
+      @PathVariable("id") String id, @PathVariable("pageNum") int pageNum) {
     UserPrincipal principal = currentPrincipal();
+    String levelSubjectId = this.tenSetDao.findLevelSubjectIdById(id).orElse(null);
     this.levelSubjectAccessService.ensureAccess(
         levelSubjectId, principal.getUserId(), principal.getUserType());
     return RestResponse.ok(

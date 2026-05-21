@@ -1,10 +1,14 @@
 package com.inviq.serviceImpl;
 
-import com.inviq.service.LevelSubjectAccessService;
-import com.inviq.core.util.StringUtil;
 import com.inviq.core.user.UserType;
+import com.inviq.core.util.StringUtil;
+import com.inviq.dao.LevelSubjectsDao;
 import com.inviq.dao.PaymentDao;
+import com.inviq.dao.entity.LevelSubjectsEntity;
+import com.inviq.dao.filter.LevelSubjectsFilter;
 import com.inviq.dao.filter.PaymentFilter;
+import com.inviq.service.LevelSubjectAccessService;
+import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -16,10 +20,12 @@ import org.springframework.stereotype.Service;
 public class LevelSubjectAccessServiceImpl implements LevelSubjectAccessService {
 
   private final PaymentDao paymentDao;
+  private final LevelSubjectsDao levelSubjectsDao;
 
   @Autowired
-  public LevelSubjectAccessServiceImpl(PaymentDao paymentDao) {
+  public LevelSubjectAccessServiceImpl(PaymentDao paymentDao, LevelSubjectsDao levelSubjectsDao) {
     this.paymentDao = paymentDao;
+    this.levelSubjectsDao = levelSubjectsDao;
   }
 
   @Override
@@ -27,13 +33,23 @@ public class LevelSubjectAccessServiceImpl implements LevelSubjectAccessService 
     if (userType == UserType.ADMIN || userType == UserType.WRITER) return;
     if (StringUtil.isBlankOrNull(levelSubjectId)) return;
 
-    PaymentFilter filter = new PaymentFilter();
-    filter.setLevelSubjectId(levelSubjectId);
-    filter.setUserId(userId);
-    filter.setIsPaymentSuccess(true);
+    LevelSubjectsFilter subjectFilter = new LevelSubjectsFilter();
+    subjectFilter.setId(levelSubjectId);
+    LevelSubjectsEntity levelSubject =
+        this.levelSubjectsDao.findOne(subjectFilter).orElse(null);
+
+    if (levelSubject == null) return;
+
+    if (levelSubject.getPrice() == null
+        || levelSubject.getPrice().compareTo(BigDecimal.ZERO) == 0) return;
+
+    PaymentFilter paymentFilter = new PaymentFilter();
+    paymentFilter.setLevelSubjectId(levelSubjectId);
+    paymentFilter.setUserId(userId);
+    paymentFilter.setIsPaymentSuccess(true);
 
     this.paymentDao
-        .findOne(filter)
+        .findOne(paymentFilter)
         .orElseThrow(
             () -> new AccessDeniedException("Purchase required to access this content"));
   }
