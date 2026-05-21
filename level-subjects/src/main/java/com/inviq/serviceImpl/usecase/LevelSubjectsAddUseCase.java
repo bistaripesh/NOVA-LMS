@@ -65,6 +65,7 @@ public class LevelSubjectsAddUseCase
             setId(request.getSubjectId());
           }
         });
+    levelSubjectsEntity.setPrice(request.getPrice());
     return levelSubjectsEntity;
   }
 

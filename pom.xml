@@ -26,6 +26,7 @@
         <module>affiliate-referral</module>
         <module>cache-service</module>
         <module>payment-gateway</module>
+        <module>payment</module>
     </modules>
 
     <properties>

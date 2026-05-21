@@ -1,5 +1,7 @@
 package com.inviq.serviceImpl.usecase;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.inviq.audit.dao.AuditDao;
 import com.inviq.constants.FonePayConstants;
 import com.inviq.constants.FonePayEnvConstants;
 import com.inviq.constants.FonePayPaymentMode;
@@ -11,19 +13,21 @@ import com.inviq.core.util.StringUtil;
 import com.inviq.core.util.SystemUtil;
 import com.inviq.dao.AffiliateReferralDao;
 import com.inviq.dao.LevelSubjectsDao;
-import com.inviq.dao.entity.AffiliateReferralEntity;
+import com.inviq.dao.PaymentDao;
 import com.inviq.dao.entity.LevelSubjectsEntity;
 import com.inviq.dao.filter.AffiliateReferralFilter;
 import com.inviq.dao.filter.LevelSubjectsFilter;
 import com.inviq.dto.fonepay.request.FonePayIntentQRRequest;
 import com.inviq.dto.fonepay.request.FonePayLoginRequest;
+import com.inviq.dto.fonepay.response.FonePayIntentQRResponse;
 import com.inviq.dto.fonepay.response.FonePayLoginResponse;
 import com.inviq.dto.request.LevelSubjectPaymentRequest;
+import com.inviq.dto.request.PaymentAddRequest;
 import com.inviq.exception.CacheExceptionManager;
 import com.inviq.exception.FonePayExceptionManager;
 import com.inviq.service.fonepay.FonePayService;
 import com.inviq.serviceImpl.CacheService;
-import com.inviq.util.ReferralCodeUtil;
+import com.inviq.usecase.PaymentAddUseCase;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
@@ -33,18 +37,27 @@ public class LevelSubjectsInitiatePaymentUseCase {
 
   private final LevelSubjectsDao levelSubjectsDao;
   private final AffiliateReferralDao affiliateReferralDao;
+  private final PaymentDao paymentDao;
+  private final AuditDao auditDao;
   private final FonePayService fonePayService;
   private final CacheService cacheService;
+  private final ObjectMapper objectMapper;
 
   public LevelSubjectsInitiatePaymentUseCase(
       LevelSubjectsDao levelSubjectsDao,
       AffiliateReferralDao affiliateReferralDao,
+      PaymentDao paymentDao,
+      AuditDao auditDao,
       FonePayService fonePayService,
-      CacheService cacheService) {
+      CacheService cacheService,
+      ObjectMapper objectMapper) {
     this.levelSubjectsDao = levelSubjectsDao;
     this.affiliateReferralDao = affiliateReferralDao;
+    this.paymentDao = paymentDao;
+    this.auditDao = auditDao;
     this.fonePayService = fonePayService;
     this.cacheService = cacheService;
+    this.objectMapper = objectMapper;
   }
 
   public Object execute(LevelSubjectPaymentRequest request) {
@@ -54,18 +67,30 @@ public class LevelSubjectsInitiatePaymentUseCase {
       affiliateReferralFilter.setIsReferralCodeActive(true);
       affiliateReferralFilter.setReferralCode(request.getAffiliateReferralCode());
 
-      AffiliateReferralEntity affiliateReferralEntity =
-          affiliateReferralDao
-              .findOne(affiliateReferralFilter)
-              .orElseThrow(
-                  () -> new AppException(DatabaseExceptionManager.DatabaseError.RECORD_NOT_FOUND));
-      // TODO add affiliate referral logic
-      System.out.println("x--DONE--");
+      this.affiliateReferralDao
+          .findOne(affiliateReferralFilter)
+          .orElseThrow(() -> new AppException("INV-REF-003", "Invalid Affiliate Referral Code"));
     }
-    LevelSubjectsEntity levelSubject = fetchLevelSubject(request.getLevelSubjectId());
+    LevelSubjectsEntity levelSubject = this.fetchLevelSubject(request.getLevelSubjectId());
     this.ensureFonePayAuthenticated();
     FonePayIntentQRRequest qrRequest = this.buildQRRequest(levelSubject);
-    return requestIntentQR(qrRequest);
+    FonePayIntentQRResponse qrResponse = (FonePayIntentQRResponse) this.requestIntentQR(qrRequest);
+    this.savePayment(levelSubject, qrResponse, request.getAffiliateReferralCode());
+    return qrResponse;
+  }
+
+  private void savePayment(
+      LevelSubjectsEntity levelSubject,
+      FonePayIntentQRResponse qrResponse,
+      String affiliateReferralCode) {
+    PaymentAddRequest paymentAddRequest = new PaymentAddRequest();
+    paymentAddRequest.setLevelSubjectId(levelSubject.getId());
+    paymentAddRequest.setUserId(getCurrentUserId());
+    paymentAddRequest.setAmount(levelSubject.getPrice());
+    paymentAddRequest.setReferenceLabel(qrResponse.getPrn());
+    paymentAddRequest.setReferralCode(affiliateReferralCode);
+
+    new PaymentAddUseCase(paymentDao, auditDao, objectMapper).execute(paymentAddRequest);
   }
 
   private LevelSubjectsEntity fetchLevelSubject(String levelSubjectId) {
