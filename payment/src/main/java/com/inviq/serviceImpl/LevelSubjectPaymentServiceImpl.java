@@ -6,8 +6,11 @@ import com.inviq.audit.dao.AuditDao;
 import com.inviq.dao.AffiliateReferralDao;
 import com.inviq.dao.LevelSubjectsDao;
 import com.inviq.dao.PaymentDao;
+import com.inviq.dao.entity.PaymentEntity;
+import com.inviq.dao.filter.PaymentFilter;
 import com.inviq.dto.request.LevelSubjectPaymentRequest;
 import com.inviq.dto.request.LevelSubjectPaymentVerificationRequest;
+import com.inviq.dto.response.MyPurchaseResponse;
 import com.inviq.factory.PaymentFactory;
 import com.inviq.service.LevelSubjectPaymentService;
 import com.inviq.service.fonepay.FonePayService;
@@ -15,6 +18,7 @@ import com.inviq.serviceImpl.CacheService;
 import com.inviq.usecase.LevelSubjectVerifyPaymentUseCase;
 import com.inviq.usecase.LevelSubjectsInitiatePaymentUseCase;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -73,5 +77,37 @@ public class LevelSubjectPaymentServiceImpl implements LevelSubjectPaymentServic
             this.cacheService,
             this.objectMapper)
         .execute(request);
+  }
+
+  @Transactional
+  @Override
+  public List<MyPurchaseResponse> getMyPurchases(String userId) {
+    PaymentFilter filter = new PaymentFilter();
+    filter.setUserId(userId);
+    return this.paymentDao.findAll(filter).stream()
+        .map(this::toMyPurchaseResponse)
+        .toList();
+  }
+
+  private MyPurchaseResponse toMyPurchaseResponse(PaymentEntity payment) {
+    String levelName =
+        payment.getLevelSubjects() != null && payment.getLevelSubjects().getLevel() != null
+            ? payment.getLevelSubjects().getLevel().getLevel()
+            : null;
+    String subjectName =
+        payment.getLevelSubjects() != null && payment.getLevelSubjects().getSubject() != null
+            ? payment.getLevelSubjects().getSubject().getSubject()
+            : null;
+    String levelSubjectId =
+        payment.getLevelSubjects() != null ? payment.getLevelSubjects().getId() : null;
+
+    return new MyPurchaseResponse(
+        payment.getId(),
+        levelSubjectId,
+        levelName,
+        subjectName,
+        payment.getAmount(),
+        payment.getIsPaymentSuccess(),
+        payment.getCreatedOn());
   }
 }

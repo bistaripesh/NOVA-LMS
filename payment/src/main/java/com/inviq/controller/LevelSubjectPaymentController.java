@@ -1,5 +1,6 @@
 package com.inviq.controller;
 
+import com.inviq.core.context.UserPrincipal;
 import com.inviq.core.response.RestResponse;
 import com.inviq.core.response.RestResponseBody;
 import com.inviq.dto.request.LevelSubjectPaymentRequest;
@@ -8,6 +9,7 @@ import com.inviq.service.LevelSubjectPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -36,5 +38,13 @@ public class LevelSubjectPaymentController {
   public ResponseEntity<RestResponseBody> verifyPaymentForLevelSubjects(
           @RequestBody LevelSubjectPaymentVerificationRequest paymentVerificationRequest) {
     return RestResponse.ok(this.levelSubjectPaymentService.verifyPayment(paymentVerificationRequest));
+  }
+
+  @PreAuthorize("hasAuthority('USER')")
+  @GetMapping("/my-purchases")
+  public ResponseEntity<RestResponseBody> getMyPurchases() {
+    UserPrincipal principal =
+        (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    return RestResponse.ok(this.levelSubjectPaymentService.getMyPurchases(principal.getUserId()));
   }
 }

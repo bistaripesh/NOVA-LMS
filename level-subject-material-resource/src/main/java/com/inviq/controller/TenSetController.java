@@ -1,6 +1,8 @@
 package com.inviq.controller;
 
+import com.inviq.core.access.LevelSubjectAccessService;
 import com.inviq.core.constants.FileExtension;
+import com.inviq.core.context.UserPrincipal;
 import com.inviq.core.response.RestResponse;
 import com.inviq.core.response.RestResponseBody;
 import com.inviq.core.service.FileService;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,11 +28,16 @@ public class TenSetController {
 
   private final FileService fileService;
   private final TenSetCrudService tenSetCrudService;
+  private final LevelSubjectAccessService levelSubjectAccessService;
 
   @Autowired
-  public TenSetController(TenSetCrudService tenSetCrudService, FileService fileService) {
+  public TenSetController(
+      TenSetCrudService tenSetCrudService,
+      FileService fileService,
+      LevelSubjectAccessService levelSubjectAccessService) {
     this.tenSetCrudService = tenSetCrudService;
     this.fileService = fileService;
+    this.levelSubjectAccessService = levelSubjectAccessService;
   }
 
   @PreAuthorize("hasAuthority('ADMIN')")
@@ -60,16 +68,24 @@ public class TenSetController {
     return RestResponse.ok(this.tenSetCrudService.delete(request));
   }
 
-  @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+  @PreAuthorize("hasAnyAuthority('ADMIN','USER','WRITER')")
   @GetMapping("/all")
   public ResponseEntity<RestResponseBody> getTenSets(@ModelAttribute TenSetFilter tenSetFilter) {
+    UserPrincipal principal = currentPrincipal();
+    this.levelSubjectAccessService.ensureAccess(
+        tenSetFilter.getLevelSubjectId(), principal.getUserId(), principal.getUserType());
     return RestResponse.ok(this.tenSetCrudService.findAll(tenSetFilter));
   }
 
-  @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+  @PreAuthorize("hasAnyAuthority('ADMIN','USER','WRITER')")
   @GetMapping("{id}/render/{pageNum}")
   public ResponseEntity<RestResponseBody> getPdf(
-      @PathVariable("id") String id, @PathVariable("pageNum") int pageNum) {
+      @PathVariable("id") String id,
+      @PathVariable("pageNum") int pageNum,
+      @RequestParam(value = "levelSubjectId", required = false) String levelSubjectId) {
+    UserPrincipal principal = currentPrincipal();
+    this.levelSubjectAccessService.ensureAccess(
+        levelSubjectId, principal.getUserId(), principal.getUserType());
     return RestResponse.ok(
         this.tenSetCrudService.findOne(
             new TenSetFilter() {
@@ -78,5 +94,9 @@ public class TenSetController {
                 setBookPageNumber(pageNum);
               }
             }));
+  }
+
+  private UserPrincipal currentPrincipal() {
+    return (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 }

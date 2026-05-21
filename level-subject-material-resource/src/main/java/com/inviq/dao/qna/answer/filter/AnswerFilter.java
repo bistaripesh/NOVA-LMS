@@ -14,4 +14,5 @@ public class AnswerFilter extends BaseFilterRequest {
   private Integer step;
   private String levelId;
   private String subjectId;
+  private String levelSubjectId;
 }

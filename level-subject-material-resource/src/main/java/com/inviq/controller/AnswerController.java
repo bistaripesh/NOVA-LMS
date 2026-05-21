@@ -1,5 +1,7 @@
 package com.inviq.controller;
 
+import com.inviq.core.access.LevelSubjectAccessService;
+import com.inviq.core.context.UserPrincipal;
 import com.inviq.core.response.RestResponse;
 import com.inviq.core.response.RestResponseBody;
 import com.inviq.dao.qna.answer.filter.AnswerFilter;
@@ -10,6 +12,7 @@ import com.inviq.service.qna.answer.AnswerCrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -20,10 +23,14 @@ import org.springframework.web.bind.annotation.*;
 public class AnswerController {
 
   private final AnswerCrudService answerCrudService;
+  private final LevelSubjectAccessService levelSubjectAccessService;
 
   @Autowired
-  public AnswerController(AnswerCrudService answerCrudService) {
+  public AnswerController(
+      AnswerCrudService answerCrudService,
+      LevelSubjectAccessService levelSubjectAccessService) {
     this.answerCrudService = answerCrudService;
+    this.levelSubjectAccessService = levelSubjectAccessService;
   }
 
   @PreAuthorize("hasAuthority('ADMIN')")
@@ -45,22 +52,35 @@ public class AnswerController {
     return RestResponse.ok(this.answerCrudService.delete(request));
   }
 
-  @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+  @PreAuthorize("hasAnyAuthority('ADMIN','USER','WRITER')")
   @GetMapping("/all")
   public ResponseEntity<RestResponseBody> getAllAnswers(@ModelAttribute AnswerFilter answerFilter) {
+    UserPrincipal principal = currentPrincipal();
+    this.levelSubjectAccessService.ensureAccess(
+        answerFilter.getLevelSubjectId(), principal.getUserId(), principal.getUserType());
     return RestResponse.ok(this.answerCrudService.findAll(answerFilter));
   }
 
-  @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+  @PreAuthorize("hasAnyAuthority('ADMIN','USER','WRITER')")
   @GetMapping
   public ResponseEntity<RestResponseBody> getAnswersWithPagination(
       @ModelAttribute AnswerFilter answerFilter) {
+    UserPrincipal principal = currentPrincipal();
+    this.levelSubjectAccessService.ensureAccess(
+        answerFilter.getLevelSubjectId(), principal.getUserId(), principal.getUserType());
     return RestResponse.ok(this.answerCrudService.findWithPagination(answerFilter));
   }
 
-  @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+  @PreAuthorize("hasAnyAuthority('ADMIN','USER','WRITER')")
   @GetMapping("qna")
   public ResponseEntity<RestResponseBody> getAns(@ModelAttribute AnswerFilter answerFilter) {
+    UserPrincipal principal = currentPrincipal();
+    this.levelSubjectAccessService.ensureAccess(
+        answerFilter.getLevelSubjectId(), principal.getUserId(), principal.getUserType());
     return RestResponse.ok(this.answerCrudService.getAnswersGroupedByQuestion(answerFilter));
+  }
+
+  private UserPrincipal currentPrincipal() {
+    return (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 }

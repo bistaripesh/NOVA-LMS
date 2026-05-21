@@ -1,5 +1,7 @@
 package com.inviq.controller;
 
+import com.inviq.core.access.LevelSubjectAccessService;
+import com.inviq.core.context.UserPrincipal;
 import com.inviq.core.response.RestResponse;
 import com.inviq.core.response.RestResponseBody;
 import com.inviq.dao.qna.question.filter.QuestionFilter;
@@ -10,6 +12,7 @@ import com.inviq.service.qna.question.QuestionCrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -20,10 +23,14 @@ import org.springframework.web.bind.annotation.*;
 public class QuestionController {
 
   private final QuestionCrudService questionCrudService;
+  private final LevelSubjectAccessService levelSubjectAccessService;
 
   @Autowired
-  public QuestionController(QuestionCrudService questionCrudService) {
+  public QuestionController(
+      QuestionCrudService questionCrudService,
+      LevelSubjectAccessService levelSubjectAccessService) {
     this.questionCrudService = questionCrudService;
+    this.levelSubjectAccessService = levelSubjectAccessService;
   }
 
   @PreAuthorize("hasAnyAuthority('ADMIN','WRITER')")
@@ -50,6 +57,9 @@ public class QuestionController {
   @GetMapping("/all")
   public ResponseEntity<RestResponseBody> getQuestions(
       @ModelAttribute QuestionFilter questionFilter) {
+    UserPrincipal principal = currentPrincipal();
+    this.levelSubjectAccessService.ensureAccess(
+        questionFilter.getLevelSubjectId(), principal.getUserId(), principal.getUserType());
     return RestResponse.ok(this.questionCrudService.findAll(questionFilter));
   }
 
@@ -57,6 +67,13 @@ public class QuestionController {
   @GetMapping
   public ResponseEntity<RestResponseBody> getQuestionsWithPagination(
       @ModelAttribute QuestionFilter questionFilter) {
+    UserPrincipal principal = currentPrincipal();
+    this.levelSubjectAccessService.ensureAccess(
+        questionFilter.getLevelSubjectId(), principal.getUserId(), principal.getUserType());
     return RestResponse.ok(this.questionCrudService.findWithPagination(questionFilter));
+  }
+
+  private UserPrincipal currentPrincipal() {
+    return (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 }

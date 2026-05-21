@@ -12,6 +12,7 @@ import lombok.Setter;
 public class QuestionFilter extends BaseFilterRequest {
   private String year;
   private String levelSubjectMaterialId;
+  private String levelSubjectId;
   private String levelId;
   private String subjectId;
   private String question;

@@ -12,6 +12,7 @@ import lombok.Setter;
 public class TenSetFilter extends BaseFilterRequest {
   private Integer year;
   private String levelSubjectMaterialId;
+  private String levelSubjectId;
   private String title;
   private int bookPageNumber;
 }
