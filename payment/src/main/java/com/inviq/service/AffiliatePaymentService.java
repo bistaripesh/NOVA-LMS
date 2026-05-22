@@ -13,4 +13,6 @@ import java.util.List;
 public interface AffiliatePaymentService {
 
   List<AffiliatePaymentResponseDto> getAffiliatePayments(PaymentFilter paymentFilter);
+
+  void settleAffiliatePayment(String referralId);
 }

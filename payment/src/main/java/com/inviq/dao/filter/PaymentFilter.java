@@ -13,5 +13,6 @@ public class PaymentFilter extends BaseFilterRequest {
   private String levelSubjectId;
   private String referralId;
   private String userId;
+  private String affiliateId;
   private Boolean isPaymentSuccess;
 }

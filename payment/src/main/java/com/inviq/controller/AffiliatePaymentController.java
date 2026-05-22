@@ -3,11 +3,14 @@ package com.inviq.controller;
 import com.inviq.core.response.RestResponse;
 import com.inviq.core.response.RestResponseBody;
 import com.inviq.dao.filter.PaymentFilter;
+import com.inviq.dto.request.AffiliatePaymentSettleRequest;
 import com.inviq.service.AffiliatePaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,6 +32,14 @@ public class AffiliatePaymentController {
     public ResponseEntity<RestResponseBody> getAffiliateReferrals(
             @ModelAttribute PaymentFilter filter) {
         return RestResponse.ok(this.affiliatePaymentService.getAffiliatePayments(filter));
+    }
+
+    @PutMapping("/settle")
+    public ResponseEntity<RestResponseBody> settleAffiliatePayment(
+            @RequestBody AffiliatePaymentSettleRequest request) {
+        request.validateRequest();
+        this.affiliatePaymentService.settleAffiliatePayment(request.getId());
+        return RestResponse.ok(null);
     }
 
 }

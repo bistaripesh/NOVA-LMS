@@ -63,6 +63,9 @@ public class PaymentDaoImpl implements PaymentDao {
           if (StringUtil.isNotBlankOrNull(filter.getUserId())) {
             predicates.add(cb.equal(root.get("user").get("id"), filter.getUserId()));
           }
+          if (StringUtil.isNotBlankOrNull(filter.getAffiliateId())) {
+            predicates.add(cb.equal(root.get("affiliateReferral").get("affiliate").get("id"), filter.getAffiliateId()));
+          }
 
           if(filter.getIsPaymentSuccess()!=null){
               predicates.add(cb.equal(root.get("isPaymentSuccess"), filter.getIsPaymentSuccess()));
