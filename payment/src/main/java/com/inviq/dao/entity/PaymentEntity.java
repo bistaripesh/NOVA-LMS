@@ -1,17 +1,14 @@
 package com.inviq.dao.entity;
 
 import com.inviq.core.entity.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-
-import java.math.BigDecimal;
 
 /**
  * @author ripesh created on 21/05/2026
@@ -33,6 +30,9 @@ public class PaymentEntity extends BaseEntity<PaymentEntity> {
   private BigDecimal amount;
 
   private String referenceLabel;
-  private String referralCode;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+
+  private AffiliateReferralEntity affiliateReferral;
   private Boolean isPaymentSuccess;
 }

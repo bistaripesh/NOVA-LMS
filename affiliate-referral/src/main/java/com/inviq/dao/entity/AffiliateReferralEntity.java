@@ -34,4 +34,6 @@ public class AffiliateReferralEntity extends BaseEntity<AffiliateReferralEntity>
   private String description;
 
   private Boolean isReferralCodeActive;
+
+  private Boolean isTransactionSettled;
 }

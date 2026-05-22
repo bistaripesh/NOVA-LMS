@@ -1,5 +1,6 @@
 package com.inviq.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.inviq.core.dto.request.crud.add.BaseAddRequest;
 import com.inviq.core.exception.AppException;
 import com.inviq.core.util.StringUtil;
@@ -16,10 +17,10 @@ import java.math.BigDecimal;
 @Setter
 public class PaymentAddRequest extends BaseAddRequest {
   private String levelSubjectId;
-  private String referralCode;
   private String userId;
   private BigDecimal amount;
   private String referenceLabel;
+  private String referralId;
 
   @Override
   public void validateRequest() {
@@ -27,7 +28,7 @@ public class PaymentAddRequest extends BaseAddRequest {
       throw new AppException(PaymentExceptionManager.PaymentError.LEVEL_SUBJECT_ID_EMPTY);
     if (StringUtil.isBlankOrNull(this.userId))
       throw new AppException(PaymentExceptionManager.PaymentError.USER_ID_EMPTY);
-    if(StringUtil.isBlankOrNull(this.referenceLabel))
+    if (StringUtil.isBlankOrNull(this.referenceLabel))
       throw new AppException(PaymentExceptionManager.PaymentError.REFERENCE_LABEL_EMPTY);
   }
 }

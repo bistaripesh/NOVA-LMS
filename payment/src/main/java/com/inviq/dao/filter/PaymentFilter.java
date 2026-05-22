@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 public class PaymentFilter extends BaseFilterRequest {
   private String levelSubjectId;
-  private String referralCode;
+  private String referralId;
   private String userId;
   private Boolean isPaymentSuccess;
 }

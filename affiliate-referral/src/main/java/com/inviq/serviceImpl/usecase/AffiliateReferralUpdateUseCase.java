@@ -52,6 +52,7 @@ public class AffiliateReferralUpdateUseCase
   protected AffiliateReferralEntity prepareEntityForUpdate(
       AffiliateReferralEntity entity, AffiliateReferralUpdateRequest request) {
     entity.setDescription(request.getDescription());
+    entity.setIsTransactionSettled(request.getIsTransactionSettled());
     return entity;
   }
 
