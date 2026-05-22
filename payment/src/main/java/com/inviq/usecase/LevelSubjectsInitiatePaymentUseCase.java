@@ -14,6 +14,7 @@ import com.inviq.core.util.SystemUtil;
 import com.inviq.dao.AffiliateReferralDao;
 import com.inviq.dao.LevelSubjectsDao;
 import com.inviq.dao.PaymentDao;
+import com.inviq.dao.entity.AffiliateReferralEntity;
 import com.inviq.dao.entity.LevelSubjectsEntity;
 import com.inviq.dao.filter.AffiliateReferralFilter;
 import com.inviq.dao.filter.LevelSubjectsFilter;
@@ -66,28 +67,31 @@ public class LevelSubjectsInitiatePaymentUseCase {
       affiliateReferralFilter.setIsReferralCodeActive(true);
       affiliateReferralFilter.setReferralCode(request.getAffiliateReferralCode());
 
-      this.affiliateReferralDao
-          .findOne(affiliateReferralFilter)
-          .orElseThrow(() -> new AppException("INV-REF-003", "Invalid Affiliate Referral Code"));
+      AffiliateReferralEntity referralEntity =
+          this.affiliateReferralDao
+              .findOne(affiliateReferralFilter)
+              .orElseThrow(
+                  () -> new AppException("INV-REF-003", "Invalid Affiliate Referral Code"));
+      request.setReferralId(referralEntity.getId());
     }
     LevelSubjectsEntity levelSubject = this.fetchLevelSubject(request.getLevelSubjectId());
     this.ensureFonePayAuthenticated();
     FonePayIntentQRRequest qrRequest = this.buildQRRequest(levelSubject);
     FonePayIntentQRResponse qrResponse = (FonePayIntentQRResponse) this.requestIntentQR(qrRequest);
-    this.savePayment(levelSubject, qrResponse, request.getAffiliateReferralCode());
+    this.savePayment(levelSubject, qrResponse, request.getReferralId());
     return qrResponse;
   }
 
   private void savePayment(
       LevelSubjectsEntity levelSubject,
       FonePayIntentQRResponse qrResponse,
-      String affiliateReferralCode) {
+      String affiliateReferralId) {
     PaymentAddRequest paymentAddRequest = new PaymentAddRequest();
     paymentAddRequest.setLevelSubjectId(levelSubject.getId());
     paymentAddRequest.setUserId(getCurrentUserId());
     paymentAddRequest.setAmount(levelSubject.getPrice());
     paymentAddRequest.setReferenceLabel(qrResponse.getPrn());
-    paymentAddRequest.setReferralCode(affiliateReferralCode);
+    paymentAddRequest.setReferralId(affiliateReferralId);
 
     new PaymentAddUseCase(paymentDao, auditDao, objectMapper).execute(paymentAddRequest);
   }

@@ -5,6 +5,8 @@ import com.inviq.audit.dao.AuditDao;
 import com.inviq.core.entity.BaseDao;
 import com.inviq.core.entity.Module;
 import com.inviq.core.service.usecase.AbstractAddUseCase;
+import com.inviq.core.util.StringUtil;
+import com.inviq.dao.entity.AffiliateReferralEntity;
 import com.inviq.dao.entity.LevelSubjectsEntity;
 import com.inviq.dao.entity.PaymentEntity;
 import com.inviq.dao.entity.UserEntity;
@@ -63,7 +65,13 @@ public class PaymentAddUseCase
         });
     entity.setAmount(request.getAmount());
     entity.setReferenceLabel(request.getReferenceLabel());
-    entity.setReferralCode(request.getReferralCode());
+    if (StringUtil.isBlankOrNull(request.getReferralId()))
+      entity.setAffiliateReferral(
+          new AffiliateReferralEntity() {
+            {
+              setId(request.getReferralId());
+            }
+          });
     entity.setIsPaymentSuccess(false);
     return entity;
   }

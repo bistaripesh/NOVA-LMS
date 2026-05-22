@@ -20,6 +20,7 @@ public class AffiliateReferralExceptionManager extends AppException {
     AFFILIATE_ID_EMPTY("INV-AFF-ID-001", "Affiliate id is empty"),
     COMMISSION_PERCENTAGE_EMPTY("INV-AFF-COM-001", "Commission percentage is empty"),
     COMMISSION_PERCENTAGE_INVALID("INV-AFF-COM-002", "Commission percentage is invalid"),
+    TRANSACTION_SETTLEMENT_STATUS_EMPTY("INV-AFF-COM-003", "Transaction status is empty"),
     ;
 
     private final String code;

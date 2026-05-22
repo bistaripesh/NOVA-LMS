@@ -62,6 +62,7 @@ public class AffiliateReferralAddUseCase
     entity.setReferralCode(ReferralCodeUtil.generateReferralCode());
     entity.setDescription(request.getDescription());
     entity.setIsReferralCodeActive(true);
+    entity.setIsTransactionSettled(false);
     return entity;
   }
 

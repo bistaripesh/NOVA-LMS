@@ -1,5 +1,6 @@
 package com.inviq.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.inviq.core.dto.request.crud.Request;
 import com.inviq.core.exception.AppException;
 import com.inviq.core.util.StringUtil;
@@ -15,6 +16,8 @@ import lombok.Setter;
 public class LevelSubjectPaymentRequest implements Request {
   private String levelSubjectId;
   private String affiliateReferralCode;
+  @JsonIgnore
+  private String referralId;
 
   @Override
   public void validateRequest() {

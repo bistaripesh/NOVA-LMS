@@ -49,7 +49,7 @@ public class LevelSubjectVerifyPaymentUseCase {
   public Boolean execute(LevelSubjectPaymentVerificationRequest request) {
     request.validateRequest();
 
-    List<PaymentEntity> payments = fetchPayments(request.getLevelSubjectId());
+    List<PaymentEntity> payments = this.fetchPayments(request.getLevelSubjectId());
     if (payments.isEmpty()) {
       return false;
     }
