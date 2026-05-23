@@ -1,11 +1,14 @@
 package com.inviq.serviceImpl;
 
-import com.inviq.core.dto.response.Response;
+import com.inviq.core.exception.AppException;
+import com.inviq.dao.AffiliateReferralDao;
 import com.inviq.dao.PaymentDao;
 import com.inviq.dao.entity.AffiliateReferralEntity;
 import com.inviq.dao.entity.PaymentEntity;
+import com.inviq.dao.filter.AffiliateReferralFilter;
 import com.inviq.dao.filter.PaymentFilter;
 import com.inviq.dto.response.AffiliatePaymentResponseDto;
+import com.inviq.exception.PaymentExceptionManager;
 import com.inviq.service.AffiliatePaymentService;
 import java.math.BigDecimal;
 import java.util.List;
@@ -21,54 +24,64 @@ import org.springframework.stereotype.Service;
 public class AffiliatePaymentServiceImpl implements AffiliatePaymentService {
 
   private final PaymentDao paymentDao;
+  private final AffiliateReferralDao affiliateReferralDao;
 
   @Autowired
-  public AffiliatePaymentServiceImpl(PaymentDao paymentDao) {
+  public AffiliatePaymentServiceImpl(PaymentDao paymentDao, AffiliateReferralDao affiliateReferralDao) {
     this.paymentDao = paymentDao;
+    this.affiliateReferralDao = affiliateReferralDao;
   }
 
   @Override
   public List<AffiliatePaymentResponseDto> getAffiliatePayments(PaymentFilter paymentFilter) {
-    // Already has affiliateReferral inside each PaymentEntity
+    // Fetch all referrals (active and inactive) for this affiliate
+    AffiliateReferralFilter referralFilter = new AffiliateReferralFilter();
+    referralFilter.setAffiliateId(paymentFilter.getAffiliateReferralId());
+    List<AffiliateReferralEntity> allReferrals = this.affiliateReferralDao.findAll(referralFilter);
+
+    // Fetch successful payments for this affiliate and group by referral id
     PaymentFilter successFilter = new PaymentFilter();
     successFilter.setIsPaymentSuccess(true);
+    successFilter.setAffiliateReferralId(paymentFilter.getAffiliateReferralId());
     List<PaymentEntity> successfulPayments = this.paymentDao.findAll(successFilter);
 
-    // Group by referral and sum amounts
-    Map<AffiliateReferralEntity, BigDecimal> totalsByReferral =
+    Map<String, BigDecimal> totalByReferralId =
         successfulPayments.stream()
             .filter(p -> p.getAffiliateReferral() != null)
             .collect(
                 Collectors.groupingBy(
-                    PaymentEntity::getAffiliateReferral,
+                    p -> p.getAffiliateReferral().getId(),
                     Collectors.reducing(
                         BigDecimal.ZERO, PaymentEntity::getAmount, BigDecimal::add)));
 
-    // Map to DTO with commission
-    List<AffiliatePaymentResponseDto> result =
-        totalsByReferral.entrySet().stream()
-            .map(
-                entry -> {
-                  AffiliateReferralEntity referral = entry.getKey();
-                  BigDecimal total = entry.getValue();
-                  BigDecimal commission =
-                      total.multiply(
-                          BigDecimal.valueOf(referral.getCommissionPercent())
-                              .divide(BigDecimal.valueOf(100)));
+    // Build response for every referral; commission is 0 when no payments exist
+    return allReferrals.stream()
+        .map(referral -> {
+          BigDecimal total = totalByReferralId.getOrDefault(referral.getId(), BigDecimal.ZERO);
+          BigDecimal commission =
+              total.multiply(
+                  BigDecimal.valueOf(referral.getCommissionPercent())
+                      .divide(BigDecimal.valueOf(100)));
 
-                  AffiliatePaymentResponseDto dto = new AffiliatePaymentResponseDto();
-                  dto.setId(referral.getId());
-                  dto.setReferralCode(referral.getReferralCode());
-                  dto.setCommissionPercent(referral.getCommissionPercent());
-                  dto.setFullName(referral.getAffiliate().getFullName());
-                  dto.setDescription(referral.getDescription());
-                  dto.setIsReferralCodeActive(referral.getIsReferralCodeActive());
-                  dto.setCommissionAmount(commission);
-                  dto.setIsTransactionSettled(referral.getIsTransactionSettled());
-                  return  dto;
-                })
-            .collect(Collectors.toList());
+          AffiliatePaymentResponseDto dto = new AffiliatePaymentResponseDto();
+          dto.setId(referral.getId());
+          dto.setReferralCode(referral.getReferralCode());
+          dto.setCommissionPercent(referral.getCommissionPercent());
+          dto.setFullName(referral.getAffiliate().getFullName());
+          dto.setDescription(referral.getDescription());
+          dto.setIsReferralCodeActive(referral.getIsReferralCodeActive());
+          dto.setCommissionAmount(commission);
+          dto.setIsTransactionSettled(referral.getIsTransactionSettled());
+          return dto;
+        })
+        .collect(Collectors.toList());
+  }
 
-    return result;
+  @Override
+  public void settleAffiliatePayment(String referralId) {
+    AffiliateReferralEntity referral = this.affiliateReferralDao.findById(referralId)
+        .orElseThrow(() -> new AppException(PaymentExceptionManager.PaymentError.REFERRAL_NOT_FOUND));
+    referral.setIsTransactionSettled(true);
+    this.affiliateReferralDao.update(referral);
   }
 }

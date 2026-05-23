@@ -21,6 +21,8 @@ public class PaymentExceptionManager extends AppException {
     PAYMENT_ID_EMPTY("INV-LVS-ID", "Payment id is empty"),
     REFERENCE_LABEL_EMPTY("INV-LVS-ID", "Reference label is empty"),
     PAYMENT_SUCCESS_STATUS_EMPTY("INV-LVS-ID", "Payment success status is empty"),
+    REFERRAL_ID_EMPTY("INV-PAY-REF-ID", "Referral id is empty"),
+    REFERRAL_NOT_FOUND("INV-PAY-REF-NF", "Affiliate referral not found"),
     ;
 
     private final String code;
