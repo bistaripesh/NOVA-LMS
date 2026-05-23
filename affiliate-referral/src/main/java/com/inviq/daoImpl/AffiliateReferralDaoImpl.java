@@ -16,6 +16,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
@@ -54,7 +55,8 @@ public class AffiliateReferralDaoImpl implements AffiliateReferralDao {
 
   @Override
   public List<AffiliateReferralEntity> findAll(AffiliateReferralFilter filter) {
-    return this.affiliateReferralRepository.findAll(this.getAffiliateReferralSpecification(filter));
+    Sort sort = Sort.by(Sort.Direction.DESC, "modifiedOn");
+    return this.affiliateReferralRepository.findAll(this.getAffiliateReferralSpecification(filter),sort);
   }
 
   @Override

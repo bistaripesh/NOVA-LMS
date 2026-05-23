@@ -16,6 +16,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
@@ -54,13 +55,12 @@ public class QuestionDaoImpl implements QuestionDao {
 
   @Override
   public List<QuestionEntity> findAll(QuestionFilter filter) {
-
-    return this.questionRepository.findAll(this.getQuestionSpecification(filter));
+    Sort sort = Sort.by(Sort.Direction.DESC, "year");
+    return this.questionRepository.findAll(this.getQuestionSpecification(filter),sort);
   }
 
   @Override
   public long count(QuestionFilter filter) {
-
     return this.questionRepository.count(this.getQuestionSpecification(filter));
   }
 
