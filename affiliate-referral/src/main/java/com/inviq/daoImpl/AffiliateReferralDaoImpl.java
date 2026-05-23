@@ -55,7 +55,7 @@ public class AffiliateReferralDaoImpl implements AffiliateReferralDao {
 
   @Override
   public List<AffiliateReferralEntity> findAll(AffiliateReferralFilter filter) {
-    Sort sort = Sort.by(Sort.Direction.DESC, "modifiedOn");
+    Sort sort = Sort.by(Sort.Direction.DESC, "createdOn");
     return this.affiliateReferralRepository.findAll(this.getAffiliateReferralSpecification(filter),sort);
   }
 
