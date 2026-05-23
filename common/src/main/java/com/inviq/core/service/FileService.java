@@ -17,7 +17,8 @@ public class FileService {
 
       return FileUtil.writeFileTemporarily(file, fileExtension);
     } catch (Exception ex) {
-      throw new AppException(  String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), ex.getMessage());
+      throw new AppException(
+          String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), ex.getMessage());
     }
   }
 }

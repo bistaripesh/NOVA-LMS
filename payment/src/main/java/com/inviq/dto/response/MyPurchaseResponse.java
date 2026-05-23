@@ -1,21 +1,17 @@
 package com.inviq.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import com.inviq.core.dto.response.Response;
 import java.math.BigDecimal;
 import java.time.Instant;
+import lombok.Getter;
+import lombok.Setter;
 
-/**w
+/**
  * @author ripesh created on 22/05/2026
  */
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class MyPurchaseResponse {
+public class MyPurchaseResponse implements Response {
   private String paymentId;
   private String levelSubjectId;
   private String level;

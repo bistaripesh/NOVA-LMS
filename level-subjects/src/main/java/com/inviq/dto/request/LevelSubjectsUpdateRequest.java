@@ -3,10 +3,9 @@ package com.inviq.dto.request;
 import com.inviq.core.dto.request.crud.update.BaseUpdateRequest;
 import com.inviq.core.exception.AppException;
 import com.inviq.exception.LevelSubjectsException;
+import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.math.BigDecimal;
 
 /**
  * @author ripesh created on 05/05/2026

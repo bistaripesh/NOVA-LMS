@@ -9,9 +9,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum PaymentGateWays {
+  FONE_PAY("FONE_PAY", "FonePay"),
+  ;
 
-    FONE_PAY("FONE_PAY", "FonePay"),;
-
-    private final String code;
-    private final String displayName;
+  private final String code;
+  private final String displayName;
 }

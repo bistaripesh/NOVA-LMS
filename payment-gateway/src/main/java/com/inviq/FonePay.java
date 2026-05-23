@@ -2,11 +2,9 @@ package com.inviq;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.inviq.constants.FonePayConstants;
 import com.inviq.constants.FonePayEndpoints;
 import com.inviq.constants.FonePayEnvConstants;
 import com.inviq.core.util.SystemUtil;
-
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -27,14 +25,13 @@ public class FonePay {
   // ─── Constants ───────────────────────────────────────────────────────────────
 
   private static final String BASE_URL = SystemUtil.getEnv("FONE_PAY_BASE_URL");
-  private static final String LOGIN_URL =
-      BASE_URL + FonePayEndpoints.LOGIN;
-  private static final String INTENT_QR_URL =
-      BASE_URL + FonePayEndpoints.INTENT_QR;
+  private static final String LOGIN_URL = BASE_URL + FonePayEndpoints.LOGIN;
+  private static final String INTENT_QR_URL = BASE_URL + FonePayEndpoints.INTENT_QR;
 
   private static final String USERNAME = SystemUtil.getEnv("FONE_PAY_USER_NAME");
   private static final String PASSWORD = SystemUtil.getEnv("FONE_PAY_PASSWORD");
-  private static final String PRIVATE_KEY = SystemUtil.getEnv(FonePayEnvConstants.FONE_PAY_PRIVATE_KEY); // your private key
+  private static final String PRIVATE_KEY =
+      SystemUtil.getEnv(FonePayEnvConstants.FONE_PAY_PRIVATE_KEY); // your private key
 
   // ─── Main ────────────────────────────────────────────────────────────────────
 

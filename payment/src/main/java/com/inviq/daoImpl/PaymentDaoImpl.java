@@ -63,12 +63,15 @@ public class PaymentDaoImpl implements PaymentDao {
           if (StringUtil.isNotBlankOrNull(filter.getUserId())) {
             predicates.add(cb.equal(root.get("user").get("id"), filter.getUserId()));
           }
-          if (StringUtil.isNotBlankOrNull(filter.getAffiliateReferralId())) {
-            predicates.add(cb.equal(root.get("affiliateReferral").get("id"), filter.getAffiliateReferralId()));
+          if (StringUtil.isNotBlankOrNull(filter.getAffiliateId())) {
+            predicates.add(
+                cb.equal(
+                    root.get("affiliateReferral").get("affiliate").get("id"),
+                    filter.getAffiliateId()));
           }
 
-          if(filter.getIsPaymentSuccess()!=null){
-              predicates.add(cb.equal(root.get("isPaymentSuccess"), filter.getIsPaymentSuccess()));
+          if (filter.getIsPaymentSuccess() != null) {
+            predicates.add(cb.equal(root.get("isPaymentSuccess"), filter.getIsPaymentSuccess()));
           }
 
           return cb.and(predicates.toArray(new Predicate[0]));
@@ -101,9 +104,9 @@ public class PaymentDaoImpl implements PaymentDao {
             predicates.add(cb.equal(root.get("user").get("id"), filter.getUserId()));
           }
 
-            if(filter.getIsPaymentSuccess()!=null){
-                predicates.add(cb.equal(root.get("isPaymentSuccess"), filter.getIsPaymentSuccess()));
-            }
+          if (filter.getIsPaymentSuccess() != null) {
+            predicates.add(cb.equal(root.get("isPaymentSuccess"), filter.getIsPaymentSuccess()));
+          }
 
           return cb.and(predicates.toArray(new Predicate[0]));
         };

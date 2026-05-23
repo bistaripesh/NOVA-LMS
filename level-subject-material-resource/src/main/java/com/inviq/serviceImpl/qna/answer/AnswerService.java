@@ -13,6 +13,7 @@ import com.inviq.dto.qna.answer.request.AnswerDeleteRequest;
 import com.inviq.dto.qna.answer.request.AnswerUpdateRequest;
 import com.inviq.dto.qna.answer.response.AnswerDetailedSearchResponse;
 import com.inviq.dto.qna.answer.response.AnswerSearchResponse;
+import com.inviq.service.LevelSubjectAccessService;
 import com.inviq.service.qna.answer.AnswerCrudService;
 import com.inviq.serviceImpl.qna.answer.usecase.AnswerAddUseCase;
 import com.inviq.serviceImpl.qna.answer.usecase.AnswerDeleteUseCase;
@@ -29,12 +30,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class AnswerService implements AnswerCrudService {
 
+  private final LevelSubjectAccessService levelSubjectAccessService;
   private final AnswerDao answerDao;
   private final AuditDao auditDao;
   private final ObjectMapper objectMapper;
 
   @Autowired
-  public AnswerService(AnswerDao answerDao, AuditDao auditDao, ObjectMapper objectMapper) {
+  public AnswerService(
+      LevelSubjectAccessService levelSubjectAccessService,
+      AnswerDao answerDao,
+      AuditDao auditDao,
+      ObjectMapper objectMapper) {
+    this.levelSubjectAccessService = levelSubjectAccessService;
     this.answerDao = answerDao;
     this.auditDao = auditDao;
     this.objectMapper = objectMapper;
@@ -62,6 +69,7 @@ public class AnswerService implements AnswerCrudService {
 
   @Override
   public Optional<Response> findOne(AnswerFilter request) {
+    this.levelSubjectAccessService.ensureAccess(request.getLevelSubjectId());
     return this.answerDao
         .findOne(request)
         .map(entity -> new AnswerEntityConverter().getResponse(entity));
@@ -69,6 +77,8 @@ public class AnswerService implements AnswerCrudService {
 
   @Override
   public List<Response> findAll(AnswerFilter request) {
+    this.levelSubjectAccessService.ensureAccess(request.getLevelSubjectId());
+
     return this.answerDao.findAll(request).stream()
         .map(entity -> new AnswerEntityConverter().getResponse(entity))
         .collect(Collectors.toList());
@@ -76,11 +86,14 @@ public class AnswerService implements AnswerCrudService {
 
   @Override
   public Pageable findWithPagination(AnswerFilter answerFilter) {
+    this.levelSubjectAccessService.ensureAccess(answerFilter.getLevelSubjectId());
+
     return this.answerDao.findWithPagination(answerFilter);
   }
 
   @Override
   public List<AnswerDetailedSearchResponse> getAnswersGroupedByQuestion(AnswerFilter filter) {
+    this.levelSubjectAccessService.ensureAccess(filter.getLevelSubjectId());
     Map<String, AnswerDetailedSearchResponse> map = new LinkedHashMap<>();
 
     this.answerDao

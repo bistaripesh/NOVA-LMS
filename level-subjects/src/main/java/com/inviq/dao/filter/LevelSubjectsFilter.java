@@ -1,10 +1,9 @@
 package com.inviq.dao.filter;
 
 import com.inviq.core.dto.filter.BaseFilterRequest;
+import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.math.BigDecimal;
 
 /**
  * @author ripesh created on 05/05/2026

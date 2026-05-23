@@ -1,6 +1,5 @@
 package com.inviq.controller;
 
-import com.inviq.core.exception.AppException;
 import com.inviq.core.response.RestResponse;
 import com.inviq.core.response.RestResponseBody;
 import org.springframework.http.MediaType;

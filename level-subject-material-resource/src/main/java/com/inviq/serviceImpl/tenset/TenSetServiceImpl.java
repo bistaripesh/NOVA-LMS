@@ -10,6 +10,7 @@ import com.inviq.dao.tenset.filter.TenSetFilter;
 import com.inviq.dto.tenset.request.TenSetAddRequest;
 import com.inviq.dto.tenset.request.TenSetDeleteRequest;
 import com.inviq.dto.tenset.request.TenSetUpdateRequest;
+import com.inviq.service.LevelSubjectAccessService;
 import com.inviq.service.tenset.TenSetCrudService;
 import com.inviq.serviceImpl.CacheService;
 import com.inviq.serviceImpl.tenset.usecase.TenSetAddUseCase;
@@ -29,6 +30,7 @@ public class TenSetServiceImpl implements TenSetCrudService {
 
   private final TenSetDao tenSetDao;
   private final AuditDao auditDao;
+  private final LevelSubjectAccessService levelSubjectAccessService;
   private final ObjectMapper objectMapper;
   private final CacheService cacheService;
 
@@ -37,10 +39,12 @@ public class TenSetServiceImpl implements TenSetCrudService {
       TenSetDao tenSetDao,
       AuditDao auditDao,
       CacheService cacheService,
+      LevelSubjectAccessService levelSubjectAccessService,
       ObjectMapper objectMapper) {
     this.tenSetDao = tenSetDao;
     this.auditDao = auditDao;
     this.cacheService = cacheService;
+    this.levelSubjectAccessService = levelSubjectAccessService;
     this.objectMapper = objectMapper;
   }
 
@@ -63,17 +67,21 @@ public class TenSetServiceImpl implements TenSetCrudService {
 
   @Override
   public Optional<Response> findOne(TenSetFilter request) {
-    // TODO CHECK PAYMENT ONCE INTEGRATED
+    String levelSubjectId = this.tenSetDao.findLevelSubjectIdById(request.getId()).orElse(null);
+    request.setLevelSubjectId(levelSubjectId);
+    this.levelSubjectAccessService.ensureAccess(request.getLevelSubjectId());
     return new TenSetGetOneUseCase(this.tenSetDao, this.cacheService).execute(request);
   }
 
   @Override
   public List<Response> findAll(TenSetFilter request) {
+    this.levelSubjectAccessService.ensureAccess(request.getLevelSubjectId());
     return new TenSetEntityConverter().getResponses(this.tenSetDao.findAll(request));
   }
 
   @Override
   public Pageable findWithPagination(TenSetFilter tenSetFilter) {
+    this.levelSubjectAccessService.ensureAccess(tenSetFilter.getLevelSubjectId());
     return this.tenSetDao.findWithPagination(tenSetFilter);
   }
 }

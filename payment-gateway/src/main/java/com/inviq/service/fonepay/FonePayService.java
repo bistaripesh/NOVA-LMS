@@ -20,6 +20,6 @@ public interface FonePayService {
 
   FonePayIntentQRResponse getIntentQR(FonePayIntentQRRequest request) throws Exception;
 
-  FonePayPaymentStatusResponse getPaymentStatus(FonePayPaymentStatusRequest request) throws Exception;
-
+  FonePayPaymentStatusResponse getPaymentStatus(FonePayPaymentStatusRequest request)
+      throws Exception;
 }

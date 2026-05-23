@@ -10,6 +10,7 @@ import com.inviq.dao.affiliate.filter.LevelSubjectChapterFilter;
 import com.inviq.dto.request.LevelSubjectChapterAddRequest;
 import com.inviq.dto.request.LevelSubjectChapterDeleteRequest;
 import com.inviq.dto.request.LevelSubjectChapterUpdateRequest;
+import com.inviq.service.LevelSubjectAccessService;
 import com.inviq.service.LevelSubjectChapterCrudService;
 import com.inviq.serviceImpl.usecase.LevelSubjectChapterAddUseCase;
 import com.inviq.serviceImpl.usecase.LevelSubjectChapterDeleteUseCase;
@@ -29,10 +30,15 @@ public class LevelSubjectChapterService implements LevelSubjectChapterCrudServic
   private final LevelSubjectChapterDao levelSubjectChapterDao;
   private final AuditDao auditDao;
   private final ObjectMapper objectMapper;
+  private final LevelSubjectAccessService levelSubjectAccessService;
 
   @Autowired
   public LevelSubjectChapterService(
-      LevelSubjectChapterDao levelSubjectChapterDao, AuditDao auditDao, ObjectMapper objectMapper) {
+      LevelSubjectAccessService levelSubjectAccessService,
+      LevelSubjectChapterDao levelSubjectChapterDao,
+      AuditDao auditDao,
+      ObjectMapper objectMapper) {
+    this.levelSubjectAccessService = levelSubjectAccessService;
     this.levelSubjectChapterDao = levelSubjectChapterDao;
     this.auditDao = auditDao;
     this.objectMapper = objectMapper;
@@ -71,12 +77,14 @@ public class LevelSubjectChapterService implements LevelSubjectChapterCrudServic
 
   @Override
   public List<Response> findAll(LevelSubjectChapterFilter request) {
+    this.levelSubjectAccessService.ensureAccess(request.getLevelSubjectId());
     return new LevelSubjectChapterEntityConverter()
         .getResponses(this.levelSubjectChapterDao.findAll(request));
   }
 
   @Override
   public Pageable findWithPagination(LevelSubjectChapterFilter levelSubjectChapterFilter) {
+    this.levelSubjectAccessService.ensureAccess(levelSubjectChapterFilter.getLevelSubjectId());
     return this.levelSubjectChapterDao.findWithPagination(levelSubjectChapterFilter);
   }
 }

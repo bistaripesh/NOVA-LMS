@@ -92,7 +92,7 @@ public class AffiliateReferralDaoImpl implements AffiliateReferralDao {
             predicates.add(cb.equal(root.get("affiliate").get("id"), filter.getAffiliateId()));
           }
 
-          if(StringUtil.isNotBlankOrNull(filter.getReferralCode())){
+          if (StringUtil.isNotBlankOrNull(filter.getReferralCode())) {
             predicates.add(cb.equal(root.get("referralCode"), filter.getReferralCode()));
           }
 

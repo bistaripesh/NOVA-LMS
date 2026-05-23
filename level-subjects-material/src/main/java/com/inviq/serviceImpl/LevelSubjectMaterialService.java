@@ -10,6 +10,7 @@ import com.inviq.dao.filter.LevelSubjectMaterialFilter;
 import com.inviq.dto.tenset.request.LevelSubjectMaterialAddRequest;
 import com.inviq.dto.tenset.request.LevelSubjectMaterialDeleteRequest;
 import com.inviq.dto.tenset.request.LevelSubjectMaterialUpdateRequest;
+import com.inviq.service.LevelSubjectAccessService;
 import com.inviq.service.LevelSubjectMaterialCrudService;
 import com.inviq.serviceImpl.usecase.LevelSubjectMaterialAddUseCase;
 import com.inviq.serviceImpl.usecase.LevelSubjectMaterialDeleteUseCase;
@@ -26,14 +27,17 @@ import org.springframework.stereotype.Service;
 public class LevelSubjectMaterialService implements LevelSubjectMaterialCrudService {
 
   private final LevelSubjectMaterialDao levelSubjectMaterialDao;
+  private final LevelSubjectAccessService levelSubjectAccessService;
   private final AuditDao auditDao;
   private final ObjectMapper objectMapper;
 
   @Autowired
   public LevelSubjectMaterialService(
+      LevelSubjectAccessService levelSubjectAccessService,
       LevelSubjectMaterialDao levelSubjectMaterialDao,
       AuditDao auditDao,
       ObjectMapper objectMapper) {
+    this.levelSubjectAccessService = levelSubjectAccessService;
     this.levelSubjectMaterialDao = levelSubjectMaterialDao;
     this.auditDao = auditDao;
     this.objectMapper = objectMapper;
@@ -63,6 +67,7 @@ public class LevelSubjectMaterialService implements LevelSubjectMaterialCrudServ
 
   @Override
   public Optional<Response> findOne(LevelSubjectMaterialFilter request) {
+    this.levelSubjectAccessService.ensureAccess(request.getLevelSubjectId());
     return this.levelSubjectMaterialDao
         .findOne(request)
         .map(entity -> new LevelSubjectMaterialEntityConverter().getResponse(entity));
@@ -70,12 +75,14 @@ public class LevelSubjectMaterialService implements LevelSubjectMaterialCrudServ
 
   @Override
   public List<Response> findAll(LevelSubjectMaterialFilter request) {
+    this.levelSubjectAccessService.ensureAccess(request.getLevelSubjectId());
     return new LevelSubjectMaterialEntityConverter()
         .getResponses(this.levelSubjectMaterialDao.findAll(request));
   }
 
   @Override
   public Pageable findWithPagination(LevelSubjectMaterialFilter levelSubjectMaterialFilter) {
+    this.levelSubjectAccessService.ensureAccess(levelSubjectMaterialFilter.getLevelSubjectId());
     return this.levelSubjectMaterialDao.findWithPagination(levelSubjectMaterialFilter);
   }
 }

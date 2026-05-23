@@ -32,9 +32,7 @@ public class LevelSubjectsService implements LevelSubjectsCrudService {
 
   @Autowired
   public LevelSubjectsService(
-      LevelSubjectsDao levelSubjectsDao,
-      AuditDao auditDao,
-      ObjectMapper objectMapper) {
+      LevelSubjectsDao levelSubjectsDao, AuditDao auditDao, ObjectMapper objectMapper) {
     this.levelSubjectsDao = levelSubjectsDao;
     this.auditDao = auditDao;
     this.objectMapper = objectMapper;

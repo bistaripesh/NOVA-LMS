@@ -15,10 +15,9 @@ import com.inviq.dao.tenset.entity.TenSetEntity;
 import com.inviq.dao.tenset.filter.TenSetFilter;
 import com.inviq.dto.tenset.request.TenSetAddRequest;
 import com.inviq.dto.tenset.response.TenSetAddResponse;
-import org.springframework.http.HttpStatus;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
+import org.springframework.http.HttpStatus;
 
 /**
  * @author ripesh created on 06/05/2026
@@ -41,7 +40,7 @@ public class TenSetAddUseCase
               StringUtil.getUUID().concat("_").concat(request.getTitle()),
               FileExtension.PDF));
     } catch (Exception ex) {
-      throw new AppException(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR),ex.getMessage());
+      throw new AppException(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR), ex.getMessage());
     }
   }
 

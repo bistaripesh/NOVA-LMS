@@ -45,8 +45,7 @@ public class Main {
     System.out.println("----UNIQUE---REF");
     System.out.println(uniqueRef);
 
-
-    FonePayPaymentStatusRequest req= new FonePayPaymentStatusRequest();
+    FonePayPaymentStatusRequest req = new FonePayPaymentStatusRequest();
     req.setBearerToken(loginResp.getAccessToken());
     req.setTerminalId("2222090019524882");
     req.setReferenceLabel("REF1779290578333");
@@ -55,13 +54,13 @@ public class Main {
     System.out.println(resp.getPaymentStatus());
 
     for (BankDetails response : fonePayBankListResponse.getBankDetails()) {
-    //  System.out.println(response.getBankName());
-   //   System.out.println(response.getBankCode());
-     // System.out.println(response.getBankIcon());
+      //  System.out.println(response.getBankName());
+      //   System.out.println(response.getBankCode());
+      // System.out.println(response.getBankIcon());
     }
 
-  //  FonePayIntentQRResponse qrResponse = fonePayService.getIntentQR(fonePayIntentQRRequest);
+    //  FonePayIntentQRResponse qrResponse = fonePayService.getIntentQR(fonePayIntentQRRequest);
 
- //  System.out.println(qrResponse.getQrString());
+    //  System.out.println(qrResponse.getQrString());
   }
 }

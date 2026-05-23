@@ -1,10 +1,7 @@
 package com.inviq.service;
 
-import com.inviq.core.dto.response.Response;
-import com.inviq.dao.filter.AffiliateReferralFilter;
 import com.inviq.dao.filter.PaymentFilter;
-import com.inviq.dto.response.AffiliatePaymentResponseDto;
-
+import com.inviq.dto.response.AffiliatePaymentResponse;
 import java.util.List;
 
 /**
@@ -12,7 +9,7 @@ import java.util.List;
  */
 public interface AffiliatePaymentService {
 
-  List<AffiliatePaymentResponseDto> getAffiliatePayments(PaymentFilter paymentFilter);
+  List<AffiliatePaymentResponse> getAffiliatePayments(PaymentFilter paymentFilter);
 
   void settleAffiliatePayment(String referralId);
 }

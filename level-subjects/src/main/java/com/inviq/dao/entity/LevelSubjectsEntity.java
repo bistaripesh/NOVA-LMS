@@ -2,13 +2,12 @@ package com.inviq.dao.entity;
 
 import com.inviq.core.entity.BaseEntity;
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-
-import java.math.BigDecimal;
 
 /**
  * @author ripesh created on 05/05/2026

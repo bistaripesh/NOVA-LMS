@@ -1,22 +1,18 @@
 package com.inviq.controller;
 
 import com.inviq.core.constants.FileExtension;
-import com.inviq.core.context.UserPrincipal;
 import com.inviq.core.response.RestResponse;
 import com.inviq.core.response.RestResponseBody;
 import com.inviq.core.service.FileService;
-import com.inviq.dao.tenset.TenSetDao;
 import com.inviq.dao.tenset.filter.TenSetFilter;
 import com.inviq.dto.tenset.request.TenSetAddRequest;
 import com.inviq.dto.tenset.request.TenSetDeleteRequest;
 import com.inviq.dto.tenset.request.TenSetUpdateRequest;
-import com.inviq.service.LevelSubjectAccessService;
 import com.inviq.service.tenset.TenSetCrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,19 +25,11 @@ public class TenSetController {
 
   private final FileService fileService;
   private final TenSetCrudService tenSetCrudService;
-  private final TenSetDao tenSetDao;
-  private final LevelSubjectAccessService levelSubjectAccessService;
 
   @Autowired
-  public TenSetController(
-      TenSetCrudService tenSetCrudService,
-      FileService fileService,
-      TenSetDao tenSetDao,
-      LevelSubjectAccessService levelSubjectAccessService) {
+  public TenSetController(TenSetCrudService tenSetCrudService, FileService fileService) {
     this.tenSetCrudService = tenSetCrudService;
     this.fileService = fileService;
-    this.tenSetDao = tenSetDao;
-    this.levelSubjectAccessService = levelSubjectAccessService;
   }
 
   @PreAuthorize("hasAuthority('ADMIN')")
@@ -75,9 +63,6 @@ public class TenSetController {
   @PreAuthorize("hasAnyAuthority('ADMIN','USER','WRITER')")
   @GetMapping("/all")
   public ResponseEntity<RestResponseBody> getTenSets(@ModelAttribute TenSetFilter tenSetFilter) {
-    UserPrincipal principal = currentPrincipal();
-    this.levelSubjectAccessService.ensureAccess(
-        tenSetFilter.getLevelSubjectId(), principal.getUserId(), principal.getUserType());
     return RestResponse.ok(this.tenSetCrudService.findAll(tenSetFilter));
   }
 
@@ -85,10 +70,6 @@ public class TenSetController {
   @GetMapping("{id}/render/{pageNum}")
   public ResponseEntity<RestResponseBody> getPdf(
       @PathVariable("id") String id, @PathVariable("pageNum") int pageNum) {
-    UserPrincipal principal = currentPrincipal();
-    String levelSubjectId = this.tenSetDao.findLevelSubjectIdById(id).orElse(null);
-    this.levelSubjectAccessService.ensureAccess(
-        levelSubjectId, principal.getUserId(), principal.getUserType());
     return RestResponse.ok(
         this.tenSetCrudService.findOne(
             new TenSetFilter() {
@@ -97,9 +78,5 @@ public class TenSetController {
                 setBookPageNumber(pageNum);
               }
             }));
-  }
-
-  private UserPrincipal currentPrincipal() {
-    return (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 }

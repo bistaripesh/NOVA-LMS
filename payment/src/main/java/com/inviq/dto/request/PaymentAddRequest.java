@@ -1,14 +1,12 @@
 package com.inviq.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.inviq.core.dto.request.crud.add.BaseAddRequest;
 import com.inviq.core.exception.AppException;
 import com.inviq.core.util.StringUtil;
 import com.inviq.exception.PaymentExceptionManager;
+import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.math.BigDecimal;
 
 /**
  * @author ripesh created on 21/05/2026

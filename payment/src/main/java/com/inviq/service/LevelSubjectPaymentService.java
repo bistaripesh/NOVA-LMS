@@ -1,8 +1,8 @@
 package com.inviq.service;
 
+import com.inviq.core.dto.response.Response;
 import com.inviq.dto.request.LevelSubjectPaymentRequest;
 import com.inviq.dto.request.LevelSubjectPaymentVerificationRequest;
-import com.inviq.dto.response.MyPurchaseResponse;
 import java.util.List;
 
 /**
@@ -14,5 +14,5 @@ public interface LevelSubjectPaymentService {
 
   Boolean verifyPayment(LevelSubjectPaymentVerificationRequest request);
 
-  List<MyPurchaseResponse> getMyPurchases(String userId);
+  List<Response> getUserPurchases();
 }

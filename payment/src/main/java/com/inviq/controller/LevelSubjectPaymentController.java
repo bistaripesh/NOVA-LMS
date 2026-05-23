@@ -1,6 +1,5 @@
 package com.inviq.controller;
 
-import com.inviq.core.context.UserPrincipal;
 import com.inviq.core.response.RestResponse;
 import com.inviq.core.response.RestResponseBody;
 import com.inviq.dto.request.LevelSubjectPaymentRequest;
@@ -9,7 +8,6 @@ import com.inviq.service.LevelSubjectPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -30,20 +28,20 @@ public class LevelSubjectPaymentController {
   @PostMapping("/initiate-payment")
   public ResponseEntity<RestResponseBody> initiatePaymentForLevelSubjects(
       @RequestBody LevelSubjectPaymentRequest levelSubjectPaymentRequest) {
-    return RestResponse.ok(this.levelSubjectPaymentService.initiatePayment(levelSubjectPaymentRequest));
+    return RestResponse.ok(
+        this.levelSubjectPaymentService.initiatePayment(levelSubjectPaymentRequest));
   }
 
   @PreAuthorize("hasAuthority('USER')")
   @PostMapping("/verify-payment")
   public ResponseEntity<RestResponseBody> verifyPaymentForLevelSubjects(
-          @RequestBody LevelSubjectPaymentVerificationRequest paymentVerificationRequest) {
-    return RestResponse.ok(this.levelSubjectPaymentService.verifyPayment(paymentVerificationRequest));
+      @RequestBody LevelSubjectPaymentVerificationRequest paymentVerificationRequest) {
+    return RestResponse.ok(
+        this.levelSubjectPaymentService.verifyPayment(paymentVerificationRequest));
   }
 
   @GetMapping("/my-purchases")
-  public ResponseEntity<RestResponseBody> getMyPurchases() {
-    UserPrincipal principal =
-        (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    return RestResponse.ok(this.levelSubjectPaymentService.getMyPurchases(principal.getUserId()));
+  public ResponseEntity<RestResponseBody> getUserPurchases() {
+    return RestResponse.ok(this.levelSubjectPaymentService.getUserPurchases());
   }
 }

@@ -2,7 +2,6 @@ package com.inviq.dao.entity;
 
 import com.inviq.core.entity.BaseEntity;
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,7 +31,7 @@ public class PaymentEntity extends BaseEntity<PaymentEntity> {
   private String referenceLabel;
 
   @ManyToOne(fetch = FetchType.LAZY)
-
   private AffiliateReferralEntity affiliateReferral;
+
   private Boolean isPaymentSuccess;
 }

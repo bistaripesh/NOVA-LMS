@@ -23,7 +23,7 @@ public class PaymentFactory {
         return fonePayService;
       }
       default -> {
-        throw new AppException("EW","Payment Gateway not supported");
+        throw new AppException("EW", "Payment Gateway not supported");
       }
     }
   }

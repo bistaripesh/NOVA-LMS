@@ -16,8 +16,7 @@ import lombok.Setter;
 public class LevelSubjectPaymentRequest implements Request {
   private String levelSubjectId;
   private String affiliateReferralCode;
-  @JsonIgnore
-  private String referralId;
+  @JsonIgnore private String referralId;
 
   @Override
   public void validateRequest() {
