@@ -65,7 +65,7 @@ public class PaymentAddUseCase
         });
     entity.setAmount(request.getAmount());
     entity.setReferenceLabel(request.getReferenceLabel());
-    if (StringUtil.isBlankOrNull(request.getReferralId()))
+    if (StringUtil.isNotBlankOrNull(request.getReferralId()))
       entity.setAffiliateReferral(
           new AffiliateReferralEntity() {
             {

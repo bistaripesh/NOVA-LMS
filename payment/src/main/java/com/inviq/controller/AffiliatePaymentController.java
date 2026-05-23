@@ -18,17 +18,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/affiliate-payment")
 public class AffiliatePaymentController {
 
-    private final AffiliatePaymentService affiliatePaymentService;
+  private final AffiliatePaymentService affiliatePaymentService;
 
-    @Autowired
-    public AffiliatePaymentController(AffiliatePaymentService affiliatePaymentService) {
-        this.affiliatePaymentService = affiliatePaymentService;
-    }
+  @Autowired
+  public AffiliatePaymentController(AffiliatePaymentService affiliatePaymentService) {
+    this.affiliatePaymentService = affiliatePaymentService;
+  }
 
-    @GetMapping
-    public ResponseEntity<RestResponseBody> getAffiliateReferrals(
-            @ModelAttribute PaymentFilter filter) {
-        return RestResponse.ok(this.affiliatePaymentService.getAffiliatePayments(filter));
-    }
-
+  @GetMapping
+  public ResponseEntity<RestResponseBody> getAffiliateReferrals(
+      @ModelAttribute PaymentFilter filter) {
+    return RestResponse.ok(this.affiliatePaymentService.getAffiliatePayments(filter));
+  }
 }

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inviq.audit.dao.AuditDao;
 import com.inviq.core.entity.BaseDao;
 import com.inviq.core.entity.Module;
+import com.inviq.core.entity.exception.DatabaseExceptionManager;
+import com.inviq.core.exception.AppException;
 import com.inviq.core.service.usecase.AbstractUpdateUseCase;
 import com.inviq.dao.entity.AffiliateReferralEntity;
 import com.inviq.dao.filter.AffiliateReferralFilter;
@@ -35,7 +37,16 @@ public class AffiliateReferralDeleteUseCase
       AffiliateReferralUpdateRequest request, AffiliateReferralEntity entityInRecord) {}
 
   @Override
-  protected void preProcessRequest(AffiliateReferralUpdateRequest request) {}
+  protected void preProcessRequest(AffiliateReferralUpdateRequest request) {
+    AffiliateReferralFilter filter = new AffiliateReferralFilter();
+    filter.setId(request.getId());
+    AffiliateReferralEntity referralEntity =
+        this.entityDao
+            .findOne(filter)
+            .orElseThrow(
+                () -> new AppException(DatabaseExceptionManager.DatabaseError.RECORD_NOT_FOUND));
+    request.setIsTransactionSettled(referralEntity.getIsTransactionSettled());
+  }
 
   @Override
   protected Module getModule() {
@@ -45,10 +56,12 @@ public class AffiliateReferralDeleteUseCase
   @Override
   protected AffiliateReferralFilter prepareFilterToFindDuplicateRecord(
       AffiliateReferralUpdateRequest request) {
-    return new AffiliateReferralFilter(){{
-      setId(request.getId());
-      setIsReferralCodeActive(false);
-    }};
+    return new AffiliateReferralFilter() {
+      {
+        setId(request.getId());
+        setIsReferralCodeActive(false);
+      }
+    };
   }
 
   @Override
